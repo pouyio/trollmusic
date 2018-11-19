@@ -22,6 +22,12 @@ const app = new Vue({
     sockets: {
         'video-added': function ([user, videoId]) {
             this.videoId = videoId
+        },
+        paused: function() {
+            this.$refs.youtube.player.pauseVideo();
+        },
+        playing: function() {
+            this.$refs.youtube.player.playVideo();
         }
     },
     created: function () {
@@ -29,8 +35,11 @@ const app = new Vue({
         this.user = 'pollo' + new Date().getTime();
     },
     methods: {
+        paused: function () {
+            this.$socket.emit('paused', this.user);
+        },
         playing: function () {
-            console.log('plating')
+            this.$socket.emit('playing', this.user);
         }
     }
 });

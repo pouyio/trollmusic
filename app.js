@@ -16,7 +16,15 @@ io.on('connection', (socket) => {
     socket.on('set-user', (user, fn) => {
         socket.data = { user };
         fn(true);
-    })
+    });
+
+    socket.on('paused', (user) => {
+        io.emit('paused');
+    });
+
+    socket.on('playing', (user) => {
+        io.emit('playing');
+    });
 });
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
