@@ -17,29 +17,44 @@ const app = new Vue({
     },
     data: {
         user: '',
+        lastUser: '',
         videoId: ''
+    },
+    computed: {
+        player: function () {
+            return this.$refs.youtube.player
+        }
     },
     sockets: {
         'video-added': function ([user, videoId]) {
             this.videoId = videoId
         },
-        paused: function() {
-            this.$refs.youtube.player.pauseVideo();
+        paused: async function () {
+            this.player.pauseVideo();
         },
-        playing: function() {
-            this.$refs.youtube.player.playVideo();
+        playing: function ([user, seconds]) {
+            this.lastUser = user;
+
+            if (this.lastUser === this.user) {
+                return;
+            }
+            this.player.seekTo(seconds);
+            this.player.playVideo();
         }
     },
     created: function () {
-        // this.user = prompt('Write your username');
-        this.user = 'pollo' + new Date().getTime();
+        this.user = prompt('Write your username');
+        // this.user = 'pollo' + new Date().getTime();
     },
     methods: {
         paused: function () {
             this.$socket.emit('paused', this.user);
         },
-        playing: function () {
-            this.$socket.emit('playing', this.user);
+        onPlaying: async function (e) {
+            if (!this.lastUser || this.user === this.lastUser) {
+                console.log(e)
+                this.$socket.emit('playing', this.user, await this.player.getCurrentTime());
+            }
         }
     }
 });

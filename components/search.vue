@@ -11,18 +11,9 @@
 
 <script>
 import results from "./results";
+import  debounce from "../utils/debounce";
 const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
-const debounce = (fn, time) => {
-  let timeout;
-
-  return function() {
-    const functionCall = () => fn.apply(this, arguments);
-
-    clearTimeout(timeout);
-    timeout = setTimeout(functionCall, time);
-  };
-};
 export default {
   name: "search",
   props: ["user"],

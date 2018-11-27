@@ -22,8 +22,8 @@ io.on('connection', (socket) => {
         io.emit('paused');
     });
 
-    socket.on('playing', (user) => {
-        io.emit('playing');
+    socket.on('playing', (user, seconds) => {
+        socket.broadcast.emit('playing', user, seconds);
     });
 });
 

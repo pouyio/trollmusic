@@ -42,17 +42,16 @@
     <div id="app">
         <h1 class="text-center">This is TrollMusic!!</h1>
         <search :user="user"></search>
-        <youtube
-            v-if="videoId"
-            :video-id="videoId"
-            ref="youtube"
-            @playing="playing"
-            @paused="paused"
-            ></youtube>
+        <div v-if="videoId">
+            <youtube
+                ref="youtube"
+                :video-id="videoId"
+                @playing="onPlaying"
+                @paused="paused"
+                >
+            </youtube>
+        </div>
     </div>
-    <section>
-        <div id="player"></div>
-    </section>
 
     <script src="./main.js"></script>
 </body>
