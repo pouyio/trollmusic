@@ -11,7 +11,7 @@
 
 <script>
 import results from "./results";
-import  debounce from "../utils/debounce";
+import debounce from "../utils/debounce";
 const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
 export default {
@@ -27,15 +27,7 @@ export default {
     };
   },
   watch: {
-    searchText: function(newSearchText) {
-      this.debounceSearchVideo(newSearchText);
-    }
-  },
-  created: function() {
-    this.debounceSearchVideo = debounce(this.searchVideo, 500);
-  },
-  methods: {
-    searchVideo: async function(text) {
+    searchText: debounce(async function(text) {
       if (!text) {
         this.appendVideos([]);
         return;
@@ -44,7 +36,12 @@ export default {
         `https://www.googleapis.com/youtube/v3/search?part=snippet&kind=video&key=${KEY}&q=${text}&maxResults=5`
       );
       this.appendVideos((await results.json()).items || []);
-    },
+    }, 500)
+  },
+  created: function() {
+    this.debounceSearchVideo = debounce(this.searchVideo, 500);
+  },
+  methods: {
     appendVideos: function(videos) {
       this.results = videos;
     },
