@@ -1,60 +1,74 @@
 import Vue from 'vue/dist/vue.js';
 import VueSocketIO from 'vue-socket.io'
-import VueYoutube from 'vue-youtube'
+import VueYouTubeEmbed from 'vue-youtube-embed'
 import search from './components/search.vue';
+import pouYoutube from './components/pou-youtube.vue';
 
-Vue.use(new VueSocketIO({
-    debug: true,
-    connection: 'http://localhost:8080'
-}));
-
-Vue.use(VueYoutube);
+Vue.use(VueYouTubeEmbed)
+Vue.use(new VueSocketIO({ connection: window.location.href }));
 
 const app = new Vue({
     el: '#app',
     components: {
-        search
+        search,
+        pouYoutube
     },
     data: {
+        videoId: '',
+        seconds: 0,
+        state: 0,
         user: '',
-        lastUser: '',
-        videoId: ''
-    },
-    computed: {
-        player: function () {
-            return this.$refs.youtube.player
+        percentage: 0,
+        percentageShow: 0,
+        playerVars: {
+            controls: 1,
+            disablekb: 1,
+            modestbranding: 1,
+            showinfo: 0,
+            rel: 0
         }
     },
     sockets: {
-        'video-added': function ([user, videoId]) {
-            this.videoId = videoId
+        paused() {
+            this.state = false;
         },
-        paused: async function () {
-            this.player.pauseVideo();
-        },
-        playing: function ([user, seconds]) {
-            this.lastUser = user;
-
-            if (this.lastUser === this.user) {
-                return;
-            }
-            this.player.seekTo(seconds);
-            this.player.playVideo();
+        playing([video, user, seconds]) {
+            this.videoId = video;
+            this.state = true;
+            this.seconds = seconds;
         }
     },
-    created: function () {
-        this.user = prompt('Write your username');
-        // this.user = 'pollo' + new Date().getTime();
+    async created() {
+        // this.user = prompt('Write your username');
+        this.user = 'pollo' + new Date().getTime();
+
+        // TODO remove this request and fetch videos on socket connection
+        const videos = await (await fetch(window.location.href + "videos", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        })).json();
+
+        const firstVid = videos[0];
+        if (firstVid) {
+            this.videoId = firstVid.id;
+            this.seconds = firstVid.seconds;
+            this.state = true;
+        }
     },
     methods: {
-        paused: function () {
+        pause() {
+            this.state = false;
             this.$socket.emit('paused', this.user);
         },
-        onPlaying: async function (e) {
-            if (!this.lastUser || this.user === this.lastUser) {
-                console.log(e)
-                this.$socket.emit('playing', this.user, await this.player.getCurrentTime());
-            }
+        playing(seconds) {
+            this.state = true;
+            this.$socket.emit('playing', this.videoId, this.user, seconds);
+        },
+        add(video, user) {
+            this.$socket.emit('add', video, user);
         }
     }
 });

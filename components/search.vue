@@ -45,8 +45,9 @@ export default {
     appendVideos: function(videos) {
       this.results = videos;
     },
-    found: function() {
+    found: function(video, user) {
       this.results = [];
+      this.$emit("found", video, user)
     }
   }
 };

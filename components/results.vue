@@ -1,15 +1,15 @@
 <template>
-    <ul>
-        <video-result
-            v-for="video in videos"
-            v-bind:key="video.id.videoId"
-            :title="video.snippet.title"
-            :img="video.snippet.thumbnails.default.url"
-            :id="video.id.videoId"
-            :user="user"
-            @found="found"
-        ></video-result>
-    </ul>
+  <ul>
+    <video-result
+      v-for="video in videos"
+      v-bind:key="video.id.videoId"
+      :title="video.snippet.title"
+      :img="video.snippet.thumbnails.default.url"
+      :id="video.id.videoId"
+      :user="user"
+      @found="found"
+    ></video-result>
+  </ul>
 </template>
 
 <script>
@@ -21,8 +21,8 @@ export default {
     videoResult
   },
   methods: {
-    found: function() {
-      this.$emit("found");
+    found(video, user) {
+      this.$emit("found", video, user);
     }
   }
 };
