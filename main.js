@@ -29,7 +29,7 @@ const app = new Vue({
         }
     },
     sockets: {
-        paused() {
+        paused([user]) {
             this.state = false;
         },
         playing([video, user, seconds]) {
@@ -65,6 +65,7 @@ const app = new Vue({
         },
         playing(seconds) {
             this.state = true;
+            this.seconds = seconds;
             this.$socket.emit('playing', this.videoId, this.user, seconds);
         },
         add(video, user) {

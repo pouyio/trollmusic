@@ -98,6 +98,9 @@ export default {
       }
     },
     async seconds(seconds) {
+      if (!this.player) {
+        return;
+      }
       this.player.seekTo(seconds, true);
       if (this.state) {
         this.player.playVideo();

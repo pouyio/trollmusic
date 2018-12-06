@@ -15,9 +15,8 @@ app.use(express.static('dist'));
 
 io.on('connection', (socket) => {
 
-    const currentVideo = videos.getCurrent();
-    if (currentVideo) {
-        socket.emit('playing', currentVideo.id, currentVideo.user, currentVideo.state, currentVideo.seconds);
+    if (videos.current) {
+        socket.emit('playing', videos.current.id, videos.current.user, videos.current.seconds);
     }
 
     socket.on('set-user', (user, fn) => {
@@ -26,7 +25,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('paused', (user) => {
-        socket.broadcast.emit('paused');
+        socket.broadcast.emit('paused', user);
     });
 
     socket.on('playing', (video, user, seconds) => {
