@@ -9,80 +9,53 @@
         html {
             height: 100%;
         }
+
         body {
             background-image: url('lol.gif');
-            background-repeat: repeat-y;
-            background-size: cover;
             min-height: 100%;
             margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
-        section {
+
+        #app {
             max-width: 40em;
-            background: rgba(255,255,255,0.6);
+            background: rgba(255, 255, 255, 0.6);
             padding: 0.3em;
             margin: auto;
         }
+
         .text-center {
             text-align: center;
         }
+
         #results {
             padding: 0;
             list-style: none;
             margin: 0;
         }
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
     </style>
 </head>
 
 <body>
-    <section>
+    <div id="app">
         <h1 class="text-center">This is TrollMusic!!</h1>
-        <div class="text-center">
-            <input id="search-video-text" type="text" name="video-search" placeholder="Search video..."><br>
+        <search :user="user" @found="add"></search>
+        <div>
+            <section style="position: relative;">
+                <pou-youtube :video-id="videoId" :state="state" :seconds="seconds" @pause="pause" @playing="playing"></pou-youtube>
+            </section>
         </div>
-        <ul id="results"></ul>
-    </section>
-    <section>
-        <div id="player"></div>
-    </section>
+    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="index.js"></script>
-    <script>
-        // 3. This function creates an <iframe> (and YouTube player)
-        //    after the API code downloads.
-        // var player;
-        // function onYouTubeIframeAPIReady() {
-        //     player = new YT.Player('player', {
-        //         height: '360',
-        //         width: '640',
-        //         videoId: 'M7lc1UVf-VE',
-        //         events: {
-        //             'onReady': onPlayerReady,
-        //             'onStateChange': onPlayerStateChange
-        //         }
-        //     });
-        // }
-
-        // 4. The API will call this function when the video player is ready.
-        function onPlayerReady(event) {
-            event.target.playVideo();
-        }
-
-        // 5. The API calls this function when the player's state changes.
-        //    The function indicates that when playing a video (state=1),
-        //    the player should play for six seconds and then stop.
-        var done = false;
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING && !done) {
-                setTimeout(stopVideo, 6000);
-                done = true;
-            }
-        }
-        function stopVideo() {
-            player.stopVideo();
-        }
-    </script>
+    <script src="./main.js"></script>
 </body>
 
 </html>
