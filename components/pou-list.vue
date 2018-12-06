@@ -2,7 +2,9 @@
   <div>
     <button @click="reset">Reset ❌</button>
     <ul>
-      <li v-for="video in list" :key="video.id">{{video.id}} - {{video.user}}</li>
+      <li v-for="video in list" :key="video.id">
+        <img v-bind:src="'https://i.ytimg.com/vi/' + video.id + '/default.jpg'" alt="">
+        {{video.user}}</li>
     </ul>
   </div>
 </template>
