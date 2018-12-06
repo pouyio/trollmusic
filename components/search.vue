@@ -5,7 +5,8 @@
             v-if="results.length"
             :videos="results"
             :user="user"
-            @found="found"></results>
+            @found="found"
+            @queue="queue"></results>
     </div>
 </template>
 
@@ -33,21 +34,25 @@ export default {
         return;
       }
       const results = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&kind=video&key=${KEY}&q=${text}&maxResults=5`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=5`
       );
       this.appendVideos((await results.json()).items || []);
     }, 500)
   },
-  created: function() {
+  created() {
     this.debounceSearchVideo = debounce(this.searchVideo, 500);
   },
   methods: {
-    appendVideos: function(videos) {
+    appendVideos(videos) {
       this.results = videos;
     },
-    found: function(video, user) {
+    found(video, user) {
       this.results = [];
       this.$emit("found", video, user)
+    },
+    queue(video, user) {
+      this.results = [];
+      this.$emit("queue", video, user)
     }
   }
 };

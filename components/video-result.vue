@@ -1,6 +1,13 @@
 <template>
-  <div @click="addVideo" v-bind:style="styles">
-    <p style="background-color: white">{{ title }}</p>
+  <div :style="{width: styleObj.width, margin: '1em auto'}">
+    <p style="background-color: white; margin: 0; padding: .4em">{{ title }}</p>
+    <div :style="styles"></div>
+    <div>
+      <div style="display: flex">
+        <button style="width: 100%; padding: .4em; cursor: pointer" @click="addVideo">Play now ▶️</button>
+        <button style="width: 100%; padding: .4em; cursor: pointer" @click="queueVideo">Add to list ➕</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -10,7 +17,7 @@ export default {
   props: ["title", "img", "id", "user"],
   data: () => ({
     styleObj: {
-      height: "180px",
+      height: "240px",
       width: "320px",
       margin: "auto"
     }
@@ -26,6 +33,9 @@ export default {
   methods: {
     addVideo() {
       this.$emit("found", this.id, this.user);
+    },
+    queueVideo() {
+      this.$emit("queue", this.id, this.user);
     }
   }
 };

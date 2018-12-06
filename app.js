@@ -19,6 +19,10 @@ io.on('connection', (socket) => {
         socket.emit('playing', videos.current.id, videos.current.user, videos.current.seconds);
     }
 
+    if (videos.list.length) {
+        socket.emit('queue', '', videos.list);
+    }
+
     socket.on('set-user', (user, fn) => {
         socket.data = { user };
         fn(true);
@@ -33,9 +37,32 @@ io.on('connection', (socket) => {
     });
 
     socket.on('add', (video, user) => {
-        videos.add(video, user);
+        videos.current = { id: video, user };
         io.emit('playing', video, user, 0);
-    })
+    });
+
+    socket.on('queue', (video, user) => {
+        if (!videos.current) {
+            videos.current = { id: video, user };
+            io.emit('playing', video, user, 0);
+            return;
+        }
+        videos.queue(video, user);
+        io.emit('queue', user, videos.list);
+    });
+
+    socket.on('reset', (user) => {
+        videos.reset();
+        io.emit('queue', user, videos.list);
+    });
+
+    socket.on('ended', (video) => {
+        videos.removeAndNext(video);
+        io.emit('queue', '', videos.list);
+        if (videos.current) {
+            io.emit('playing', videos.current.id, videos.current.user, 0);
+        }
+    });
 });
 
 app.get('/videos', (req, res) => {

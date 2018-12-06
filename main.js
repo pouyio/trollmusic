@@ -3,6 +3,7 @@ import VueSocketIO from 'vue-socket.io'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import search from './components/search.vue';
 import pouYoutube from './components/pou-youtube.vue';
+import pouList from './components/pou-list.vue';
 
 Vue.use(VueYouTubeEmbed)
 Vue.use(new VueSocketIO({ connection: window.location.href }));
@@ -11,7 +12,8 @@ const app = new Vue({
     el: '#app',
     components: {
         search,
-        pouYoutube
+        pouYoutube,
+        pouList
     },
     data: {
         videoId: '',
@@ -26,37 +28,25 @@ const app = new Vue({
             modestbranding: 1,
             showinfo: 0,
             rel: 0
-        }
+        },
+        list: []
     },
     sockets: {
         paused([user]) {
             this.state = false;
         },
         playing([video, user, seconds]) {
-            this.videoId = video;
             this.state = true;
             this.seconds = seconds;
+            this.videoId = video;
+        },
+        queue([user, list]) {
+            this.list = list;
         }
     },
-    async created() {
+    created() {
         // this.user = prompt('Write your username');
         this.user = 'pollo' + new Date().getTime();
-
-        // TODO remove this request and fetch videos on socket connection
-        const videos = await (await fetch(window.location.href + "videos", {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }
-        })).json();
-
-        const firstVid = videos[0];
-        if (firstVid) {
-            this.videoId = firstVid.id;
-            this.seconds = firstVid.seconds;
-            this.state = true;
-        }
     },
     methods: {
         pause() {
@@ -70,6 +60,16 @@ const app = new Vue({
         },
         add(video, user) {
             this.$socket.emit('add', video, user);
+        },
+        queue(video, user) {
+            this.$socket.emit('queue', video, user);
+        },
+        reset() {
+            this.$socket.emit('reset', this.user);
+        },
+        ended(video) {
+            this.videoId = null;
+            this.$socket.emit('ended', video);
         }
     }
 });

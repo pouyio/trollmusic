@@ -2,11 +2,11 @@
   <div>
     <div style="position: relative">
       <youtube
-        v-if="videoId"
         ref="youtube"
         :video-id="videoId"
         @ready="onReady"
         @playing="onPlaying"
+        @ended="onEnded"
         :player-vars="playerVars"
       ></youtube>
       <button class="overlay" @click="togglePlay"></button>
@@ -37,6 +37,7 @@ export default {
       percentageShow: 0,
       playerVars: {
         controls: 1,
+        autoplay: 1,
         disablekb: 1,
         modestbranding: 1,
         showinfo: 0,
@@ -60,6 +61,9 @@ export default {
         this.isPendingToSeek = false;
         this.player.seekTo(this.seconds, true);
       }
+    },
+    onEnded() {
+      this.$emit("ended", this.videoId);
     },
     pause() {
       this.$emit("paused");

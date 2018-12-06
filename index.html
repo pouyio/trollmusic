@@ -5,52 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrollMusic</title>
-    <style>
-        html {
-            height: 100%;
-        }
-
-        body {
-            background-image: url('lol.gif');
-            min-height: 100%;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        }
-
-        #app {
-            max-width: 40em;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 0.3em;
-            margin: auto;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        #results {
-            padding: 0;
-            list-style: none;
-            margin: 0;
-        }
-        .overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div id="app">
-        <h1 class="text-center">This is TrollMusic!!</h1>
-        <search :user="user" @found="add"></search>
+        <h1 class="text-center">Welcome to TrollMusic<br>🎉{{ user }}🎉</h1>
+        <search :user="user" @found="add" @queue="queue"></search>
+        <section v-if="list.length">
+            <pou-list :list="list" @reset="reset"></pou-list>
+        </section>
         <div>
             <section style="position: relative;">
-                <pou-youtube :video-id="videoId" :state="state" :seconds="seconds" @pause="pause" @playing="playing"></pou-youtube>
+                <pou-youtube v-if="videoId" :video-id="videoId" :state="state" :seconds="seconds" @pause="pause" @playing="playing" @ended="ended"></pou-youtube>
             </section>
         </div>
     </div>
