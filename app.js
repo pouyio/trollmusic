@@ -23,9 +23,11 @@ io.on('connection', (socket) => {
         socket.emit('queue', '', videos.list);
     }
 
-    socket.on('set-user', (user, fn) => {
+    socket.emit('users', getUsers());
+    
+    socket.on('set-user', (user) => {
         socket.data = { user };
-        fn(true);
+        io.emit('users', getUsers());
     });
 
     socket.on('paused', (user) => {
@@ -65,17 +67,12 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get('/videos', (req, res) => {
-    res.json(videos.list);
-});
-
-app.get('/users', (req, res) => {
+function getUsers() {
     const users = [];
     Object.keys(io.sockets.connected).forEach((socketID) => {
         users.push(io.sockets.connected[socketID].data);
     });
-    res.send(users)
-});
-
+    return users.filter(e => e);
+}
 
 server.listen(PORT, () => console.log(`Started on port ${PORT}!`));

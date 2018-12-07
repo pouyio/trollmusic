@@ -29,10 +29,11 @@ const app = new Vue({
             showinfo: 0,
             rel: 0
         },
-        list: []
+        list: [],
+        users: []
     },
     sockets: {
-        paused([user]) {
+        paused(user) {
             this.state = false;
         },
         playing([video, user, seconds]) {
@@ -42,11 +43,15 @@ const app = new Vue({
         },
         queue([user, list]) {
             this.list = list;
+        },
+        users(users) {
+            this.users = users;
         }
     },
     created() {
-        // this.user = prompt('Write your username');
-        this.user = 'pollo' + new Date().getTime();
+        this.user = prompt('Write your username');
+        // this.user = 'pollo' + new Date().getTime();
+        this.$socket.emit('set-user', this.user);
     },
     methods: {
         pause() {
@@ -70,6 +75,11 @@ const app = new Vue({
         ended(video) {
             this.videoId = null;
             this.$socket.emit('ended', video);
+        }
+    },
+    computed: {
+        userNames() {
+            return this.users.filter(u => u.user !== this.user).map(u => u.user).join(', ');
         }
     }
 });
