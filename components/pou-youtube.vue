@@ -17,24 +17,23 @@
           style="width: 100%"
           type="range"
           min="0"
-          max="100"
-          v-model="percentage"
-          @change="changePercentage"
+          :max="secondsMax"
+          v-model="secondsInternal"
+          @change="changeSeconds"
         >
-        <input style="width: 100%" type="range" min="0" max="100" v-model="percentageShow">
+        <p style="text-align:center">{{time}}</p>
       </section>
     </div>
   </div>
 </template>
 
 <script>
+import format from 'format-duration';
 export default {
   name: "pou-youtube",
   props: ["videoId", "seconds", "state"],
   data() {
     return {
-      percentage: 0,
-      percentageShow: 0,
       playerVars: {
         controls: 1,
         autoplay: 1,
@@ -44,46 +43,61 @@ export default {
         rel: 0
       },
       player: null,
-      isPendingToSeek: true
+      isPendingToSeek: true,
+      interval: null,
+      secondsInternal: 0,
+      secondsMax: 0
     };
   },
   methods: {
-    onReady(event) {
+    playVideo() {
+      clearInterval(this.interval);
+      this.interval = setInterval(() => this.updateProgress(), 1000);
+      this.player.playVideo();
+    },
+    pauseVideo() {
+      clearInterval(this.interval);
+      this.player.pauseVideo();
+    },
+    async onReady(event) {
       this.player = event.target;
+      this.secondsMax = await this.player.getDuration();
       if (this.state) {
-        this.player.playVideo();
+        this.playVideo();
       } else {
-        this.player.pauseVide();
+        this.pauseVideo();
       }
     },
     onPlaying() {
       if (this.state && this.isPendingToSeek) {
         this.isPendingToSeek = false;
         this.player.seekTo(this.seconds, true);
+        clearInterval(this.interval);
+        this.secondsInternal = this.seconds;
+        this.interval = setInterval(() => this.updateProgress(), 1000);
       }
     },
     onEnded() {
+      clearInterval(this.interval);
       this.$emit("ended", this.videoId);
     },
-    pause() {
-      this.$emit("paused");
+    async updateProgress() {
+      this.secondsInternal = await this.player.getCurrentTime();
     },
     async togglePlay() {
       const state = await this.player.getPlayerState();
       if (state === 1) {
-        this.player.pauseVideo();
+        this.pauseVideo();
         this.$emit("pause");
       } else {
-        this.player.playVideo();
+        this.playVideo();
         this.$emit("playing", await this.player.getCurrentTime());
       }
     },
-    async changePercentage() {
-      const duration = await this.player.getDuration();
-      const secondsToSet = (+this.percentage * duration) / 100;
-      this.player.seekTo(secondsToSet, true);
+    changeSeconds() {
+      this.player.seekTo(this.secondsInternal, true);
       if (this.state) {
-        this.$emit("playing", secondsToSet);
+        this.$emit("playing", seconds);
       } else {
         this.$emit("pause");
       }
@@ -95,10 +109,10 @@ export default {
         return;
       }
       if (val) {
-        this.player.seekTo(this.seconds, true);
-        this.player.playVideo();
+        this.player.seekTo(this.secondsInternal, true);
+        this.playVideo();
       } else {
-        this.player.pauseVideo();
+        this.pauseVideo();
       }
     },
     async seconds(seconds) {
@@ -107,10 +121,15 @@ export default {
       }
       this.player.seekTo(seconds, true);
       if (this.state) {
-        this.player.playVideo();
+        this.playVideo();
       } else {
-        this.player.pauseVideo();
+        this.pauseVideo();
       }
+    }
+  },
+  computed: {
+    time() {
+      return format(this.secondsInternal * 1000);
     }
   }
 };

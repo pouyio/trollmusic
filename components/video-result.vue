@@ -1,5 +1,5 @@
 <template>
-  <div :style="{width: styleObj.width, margin: '1em auto'}">
+  <div :style="{width: styleObj.width, margin: '0 auto'}">
     <p style="background-color: white; margin: 0; padding: .4em">{{ title }}</p>
     <div :style="styles"></div>
     <div>

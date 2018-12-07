@@ -1,13 +1,11 @@
 <template>
-    <div class="text-center">
-        <input v-model="searchText" type="text" name="video-search" placeholder="Search video..."><br>
-        <results
-            v-if="results.length"
-            :videos="results"
-            :user="user"
-            @found="found"
-            @queue="queue"></results>
+  <div class="text-center">
+    <input v-model="searchText" type="text" name="video-search" placeholder="Search video...">
+    <br>
+    <div style="position: relative;">
+      <results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></results>
     </div>
+  </div>
 </template>
 
 <script>
@@ -48,11 +46,11 @@ export default {
     },
     found(video, user) {
       this.results = [];
-      this.$emit("found", video, user)
+      this.$emit("found", video, user);
     },
     queue(video, user) {
       this.results = [];
-      this.$emit("queue", video, user)
+      this.$emit("queue", video, user);
     }
   }
 };

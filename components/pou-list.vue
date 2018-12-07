@@ -1,10 +1,11 @@
 <template>
   <div>
     <button @click="reset">Reset ❌</button>
-    <ul>
-      <li v-for="video in list" :key="video.id">
-        <img v-bind:src="'https://i.ytimg.com/vi/' + video.id + '/default.jpg'" alt="">
-        {{video.user}}</li>
+    <ul style="list-style: none; padding: 0; display: flex">
+      <li v-for="video in list" :key="video.id" style="display: flex; flex-direction: column">
+        <img v-bind:src="'https://i.ytimg.com/vi/' + video.id + '/default.jpg'" alt style="max-width: 150px">
+        <span style="background: white">{{video.user}}</span>
+      </li>
     </ul>
   </div>
 </template>

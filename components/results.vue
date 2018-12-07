@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul style="padding: 0; margin: 0; position: absolute; top: 0; right: 0; left: 0; z-index: 1">
     <video-result
       v-for="video in videos"
       :key="video.id.videoId"
