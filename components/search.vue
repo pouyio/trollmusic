@@ -1,7 +1,12 @@
 <template>
-  <div class="text-center">
-    <input v-model="searchText" type="text" name="video-search" placeholder="Search video...">
-    <br>
+  <div class="control has-icons-left">
+    <input
+      v-model="searchText"
+      class="input is-rounded has-icons-left"
+      type="text"
+      placeholder="Search video..."
+    >
+    <span class="icon">🔍</span>
     <div style="position: relative;">
       <results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></results>
     </div>

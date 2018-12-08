@@ -5,24 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrollMusic</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/troll.webp">
 </head>
 
-<body>
+<body class="has-navbar-fixed-top">
     <div id="app">
-        <h1 class="text-center">Welcome to TrollMusic<br>🎉{{ user }}🎉</h1>
-        <small v-show="userNames.length">Other users: {{ userNames }}</small>
-        <search :user="user" @found="add" @queue="queue"></search>
-        <div>
-            <section style="position: relative;">
-                <pou-youtube v-if="videoId" :video-id="videoId" :state="state" :seconds="seconds" @pause="pause"
-                    @playing="playing" @ended="ended"></pou-youtube>
-            </section>
-        </div>
-        <section v-if="list.length">
-            <pou-list :list="list" @reset="reset"></pou-list>
-        </section>
     </div>
 
     <script src="./main.js"></script>
