@@ -97,7 +97,7 @@ export default {
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
       if (this.state) {
-        this.$emit("playing", seconds);
+        this.$emit("playing", this.secondsInternal);
       } else {
         this.$emit("pause");
       }
