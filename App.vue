@@ -1,9 +1,9 @@
 <template>
   <div>
     <nav class="navbar is-fixed-top columns is-vcentered is-mobile">
-      <div class="column">
+      <div class="column is-paddingless">
         <figure class="image">
-          <img style="width: 36px" src="/troll.webp">
+          <img @click="modalShow = true" style="width: 5.5em; cursor: pointer" src="/lol.gif">
         </figure>
       </div>
       <div class="column has-text-centered">
@@ -29,7 +29,8 @@
                 <img src="/ben.jpg" alt="sad ben">
               </div>
               <div class="card-content">
-                <h1 class>😱 NO VIDEO YET...
+                <h1 class>
+                  😱 NO VIDEO YET...
                   <span class="is-size-4">try searching ☝️</span>
                 </h1>
               </div>
@@ -52,10 +53,20 @@
           </div>
         </div>
       </div>
-      <section v-if="list.length" style="columns">
-        <pou-list :list="list" @reset="reset"></pou-list>
+      <section v-if="list.length" class="columns">
+          <div class="column">
+            <pou-list :list="list" @reset="reset"></pou-list>
+          </div>
       </section>
     </main>
+    <div class="modal" :class="{'is-flex': modalShow}" @click="modalShow = false">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <p class="image">
+          <img src="lol.gif">
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -87,7 +98,8 @@ export default {
         rel: 0
       },
       list: [],
-      users: []
+      users: [],
+      modalShow: false
     };
   },
   sockets: {
@@ -107,8 +119,8 @@ export default {
     }
   },
   created() {
-    // this.user = prompt('Write your username');
-    this.user = "pollo" + new Date().getTime();
+    this.user = prompt('Write your username');
+    // this.user = "pollo" + new Date().getTime();
     this.$socket.emit("set-user", this.user);
   },
   methods: {
@@ -146,11 +158,9 @@ export default {
 <style scoped>
 .column {
   padding-bottom: 0;
-  /* padding-top: 0.5em; */
 }
 .navbar {
   border-bottom: 0.2em solid var(--custom-color);
-  padding: 0.5em;
 }
 </style>
 

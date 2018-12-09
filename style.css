@@ -1,26 +1,20 @@
-/* html {
-    height: 100%;
-}
-
-body {
-    background-image: url('lol.gif');
-    min-height: 100%;
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-#app {
-    max-width: 40em;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 0.3em;
-    margin: auto;
-}
- */
-
 :root {
     --custom-color: #ffbc6b;
 }
 
 .card {
     border-radius: 5px;
+}
+
+body {
+    background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
+    /* background-image: url('lol.gif');
+    url("https://www.toptal.com/designers/subtlepatterns/patterns/dust_scratches.png")
+    url("https://www.toptal.com/designers/subtlepatterns/patterns/gravel.png") */
+}
+
+footer.footer {
+    margin-top: 1.5em;
+    border-top: 2px solid var(--custom-color);
+    padding: .7em;
 }
