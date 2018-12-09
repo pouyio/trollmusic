@@ -1,7 +1,8 @@
 <template>
-  <section style="width: 640px; margin: auto;">
+  <section style="width: fit-content; margin: auto;">
     <div class="card">
       <div class="card-header">
+        <!-- TODO get video title, prob a refactor needed to store it -->
         <h1 class="is-centered card-header-title title">🎥 {{ videoId }}</h1>
       </div>
       <div class="card-image">

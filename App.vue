@@ -23,20 +23,36 @@
             @playing="playing"
             @ended="ended"
           ></pou-youtube>
+          <div class="content has-text-centered" style="width: fit-content; margin: auto;" v-else>
+            <div class="card" style="overflow: hidden">
+              <div class="image">
+                <img src="/ben.jpg" alt="sad ben">
+              </div>
+              <div class="card-content">
+                <h1 class>😱 NO VIDEO YET...
+                  <span class="is-size-4">try searching ☝️</span>
+                </h1>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="column is-narrow" v-show="users.length">
-          <div class="card">
+        <div class="column is-narrow">
+          <div class="card" v-if="users.length > 1">
             <div class="card-header">
               <h1 class="card-header-title title is-centered">👥 Users</h1>
             </div>
             <div class="card-content">
-              <p v-for="user of otherUsers" :key="user.user">*️⃣{{ user.user }}</p>
+              <p v-for="user of otherUsers" :key="user.user">{{ user.user }}</p>
+            </div>
+          </div>
+          <div class="card" v-else>
+            <div class="card-header">
+              <h1 class="card-header-title title is-centered">No users ☹️</h1>
             </div>
           </div>
         </div>
       </div>
-      <div></div>
-      <section v-if="list.length">
+      <section v-if="list.length" style="columns">
         <pou-list :list="list" @reset="reset"></pou-list>
       </section>
     </main>
@@ -134,7 +150,7 @@ export default {
 }
 .navbar {
   border-bottom: 0.2em solid var(--custom-color);
-  padding: .5em
+  padding: 0.5em;
 }
 </style>
 
