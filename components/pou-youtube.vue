@@ -133,6 +133,9 @@ export default {
       } else {
         this.pauseVideo();
       }
+    },
+    async videoId() {
+      this.secondsMax = await this.player.getDuration();
     }
   },
   computed: {
