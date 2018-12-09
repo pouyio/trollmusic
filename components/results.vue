@@ -1,5 +1,5 @@
 <template>
-  <ul style="padding: 0; margin: 0; position: absolute; top: 0; right: 0; left: 0; z-index: 1">
+  <ul class="is-flex">
     <video-result
       v-for="video in videos"
       :key="video.id.videoId"
@@ -31,3 +31,19 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+ul {
+  --nav-height: 4.2em;
+  position: absolute;
+  top: 4.2em;
+  width: 84vw;
+  left: 6vw;
+  max-height: calc(100vh - 4.2em);
+  overflow-y: auto;
+  flex-wrap: wrap;
+  background-color: var(--custom-color);
+  justify-content: space-evenly;
+  align-items: flex-end;
+}
+</style>

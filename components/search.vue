@@ -1,15 +1,14 @@
 <template>
-  <div class="control has-icons-left">
-    <input
-      v-model="searchText"
-      class="input is-rounded has-icons-left"
-      type="text"
-      placeholder="Search video..."
-    >
-    <span class="icon">🔍</span>
-    <div style="position: relative;">
-      <results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></results>
+  <div>
+    <div class="control">
+      <input
+        v-model="searchText"
+        class="input is-rounded has-text-centered"
+        type="text"
+        placeholder="🔍 Search video..."
+      >
     </div>
+    <results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></results>
   </div>
 </template>
 
@@ -37,7 +36,7 @@ export default {
         return;
       }
       const results = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=5`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=15`
       );
       this.appendVideos((await results.json()).items || []);
     }, 500)

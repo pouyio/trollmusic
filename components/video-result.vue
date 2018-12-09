@@ -1,12 +1,14 @@
 <template>
-  <div :style="{width: styleObj.width, margin: '0 auto'}">
-    <p style="background-color: white; margin: 0; padding: .4em">{{ title }}</p>
-    <div :style="styles"></div>
-    <div>
-      <div style="display: flex">
-        <button style="width: 100%; padding: .4em; cursor: pointer" @click="addVideo">Play now ▶️</button>
-        <button style="width: 100%; padding: .4em; cursor: pointer" @click="queueVideo">Add to list ➕</button>
-      </div>
+  <div class="card" style="width: 320px; margin: .4em; overflow: hidden">
+    <figure class="image">
+      <img :src="img" alt="video image">
+    </figure>
+    <div class="card-content title is-6 is-marginless" style="padding: 0.3em;">
+      <p class="is-centered">{{ title }}</p>
+    </div>
+    <div class="card-footer is-size-7">
+      <a class="card-footer-item" style="padding: 0.3em;" @click="addVideo">Play now ▶️</a>
+      <a class="card-footer-item" style="padding: 0.3em;" @click="queueVideo">Add to list ➕</a>
     </div>
   </div>
 </template>
@@ -17,19 +19,9 @@ export default {
   props: ["title", "img", "id", "user"],
   data: () => ({
     styleObj: {
-      height: "240px",
-      width: "320px",
-      margin: "auto"
+      width: "320px"
     }
   }),
-  computed: {
-    styles() {
-      return {
-        ...this.styleObj,
-        background: "url(" + this.img + ") top left / cover no-repeat"
-      };
-    }
-  },
   methods: {
     addVideo() {
       this.$emit("found", this.id, this.user);

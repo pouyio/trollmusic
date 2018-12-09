@@ -1,41 +1,49 @@
 <template>
-  <div>
-    <div style="position: relative">
-      <youtube
-        ref="youtube"
-        :video-id="videoId"
-        @ready="onReady"
-        @playing="onPlaying"
-        @ended="onEnded"
-        :player-vars="playerVars"
-      ></youtube>
-      <button class="overlay" @click="togglePlay"></button>
+  <section style="width: 640px; margin: auto;">
+    <div class="card">
+      <div class="card-header">
+        <h1 class="is-centered card-header-title title">🎥 {{ videoId }}</h1>
+      </div>
+      <div class="card-image">
+        <div style="position: relative">
+          <youtube
+            ref="youtube"
+            :video-id="videoId"
+            @ready="onReady"
+            @playing="onPlaying"
+            @ended="onEnded"
+            :player-vars="playerVars"
+          ></youtube>
+          <button class="overlay" @click="togglePlay"></button>
+        </div>
+      </div>
+       <div class="card-content">
+          <section class="level">
+            <input
+              class="slider is-fullwidth is-circle is-primary is-small"
+              step="1"
+              min="0"
+              :max="secondsMax"
+              type="range"
+              v-model="secondsInternal"
+              @change="changeSeconds"
+            >
+            <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
+          </section>
+        </div>
     </div>
-    <div>
-      <section>
-        <input
-          style="width: 100%"
-          type="range"
-          min="0"
-          :max="secondsMax"
-          v-model="secondsInternal"
-          @change="changeSeconds"
-        >
-        <p style="text-align:center">{{time}}</p>
-      </section>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
-import format from 'format-duration';
+import format from "format-duration";
 export default {
   name: "pou-youtube",
   props: ["videoId", "seconds", "state"],
   data() {
     return {
       playerVars: {
-        controls: 1,
+        controls: 0,
         autoplay: 1,
         disablekb: 1,
         modestbranding: 1,
@@ -130,7 +138,41 @@ export default {
   computed: {
     time() {
       return format(this.secondsInternal * 1000);
+    },
+    timeMax() {
+      return format(this.secondsMax * 1000);
     }
   }
 };
 </script>
+
+<style scoped>
+.overlay {
+  position: absolute;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='50' height='60' viewport='0 0 100 100' style='fill:black;font-size:30px;'><text y='50%'>⏯</text></svg>")
+      16 0,
+    auto;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+input[type="range"].slider.is-primary::-moz-range-track {
+  background:  var(--custom-color);
+}
+
+input[type="range"].slider.is-primary::-webkit-slider-runnable-track {
+  background:  var(--custom-color);
+}
+
+input[type="range"].slider.is-primary::-ms-track {
+  background:  var(--custom-color) !important;
+}
+.tag {
+  background-color: var(--custom-color);
+}
+.card-content {
+  padding: 0 1em;
+}
+</style>

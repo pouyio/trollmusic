@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav class="navbar is-fixed-top columns is-vcentered">
+    <nav class="navbar is-fixed-top columns is-vcentered is-mobile">
       <div class="column">
-        <figure class="image is-48x48">
-          <img src="/troll.webp">
+        <figure class="image">
+          <img style="width: 36px" src="/troll.webp">
         </figure>
       </div>
       <div class="column has-text-centered">
@@ -11,23 +11,35 @@
       </div>
       <div class="column has-text-right">👤{{ user }}</div>
     </nav>
-    <small v-show="userNames.length">Other users: {{ userNames }}</small>
-    <div>
-      <section style="position: relative;">
-        <pou-youtube
-          v-if="videoId"
-          :video-id="videoId"
-          :state="state"
-          :seconds="seconds"
-          @pause="pause"
-          @playing="playing"
-          @ended="ended"
-        ></pou-youtube>
+    <main class="container column is-fluid">
+      <div class="columns">
+        <div class="column">
+          <pou-youtube
+            v-if="videoId"
+            :video-id="videoId"
+            :state="state"
+            :seconds="seconds"
+            @pause="pause"
+            @playing="playing"
+            @ended="ended"
+          ></pou-youtube>
+        </div>
+        <div class="column is-narrow" v-show="users.length">
+          <div class="card">
+            <div class="card-header">
+              <h1 class="card-header-title title is-centered">👥 Users</h1>
+            </div>
+            <div class="card-content">
+              <p v-for="user of otherUsers" :key="user.user">*️⃣{{ user.user }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div></div>
+      <section v-if="list.length">
+        <pou-list :list="list" @reset="reset"></pou-list>
       </section>
-    </div>
-    <section v-if="list.length">
-      <pou-list :list="list" @reset="reset"></pou-list>
-    </section>
+    </main>
   </div>
 </template>
 
@@ -108,11 +120,8 @@ export default {
     }
   },
   computed: {
-    userNames() {
-      return this.users
-        .filter(u => u.user !== this.user)
-        .map(u => u.user)
-        .join(", ");
+    otherUsers() {
+      return this.users.filter(u => u.user !== this.user);
     }
   }
 };
@@ -121,6 +130,11 @@ export default {
 <style scoped>
 .column {
   padding-bottom: 0;
+  /* padding-top: 0.5em; */
+}
+.navbar {
+  border-bottom: 0.2em solid var(--custom-color);
+  padding: .5em
 }
 </style>
 
