@@ -65,6 +65,10 @@ io.on('connection', (socket) => {
             io.emit('playing', videos.current.id, videos.current.user, 0);
         }
     });
+
+    socket.on('disconnect', () => {
+        io.emit('users', getUsers());
+      });
 });
 
 function getUsers() {
