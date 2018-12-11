@@ -6,7 +6,7 @@ const videos = {
         // { id: 'RvWbcK3YQ_o', user: 'pollo2' }
     ],
     add(id, user) {
-        this.current = { id: video, user };
+        this.current = { id, user };
         if (this.current && this.current.id !== id && !this.list.some(v => v.id === id)) {
             this.list = [{ id, user }, ...this.list];
         }

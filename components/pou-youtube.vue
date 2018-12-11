@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <!-- TODO get video title, prob a refactor needed to store it -->
-        <h1 class="is-centered card-header-title title">🎥 {{ videoId }}</h1>
+        <h1 class="is-centered card-header-title title">🎥 {{ title }}</h1>
       </div>
       <div class="card-image">
         <div style="position: relative">
@@ -55,7 +55,8 @@ export default {
       isPendingToSeek: true,
       interval: null,
       secondsInternal: 0,
-      secondsMax: 0
+      secondsMax: 0,
+      title: ""
     };
   },
   methods: {
@@ -70,6 +71,7 @@ export default {
     },
     async onReady(event) {
       this.player = event.target;
+      this.calcTitle(this.videoId);
       this.secondsMax = await this.player.getDuration();
       if (this.state) {
         this.playVideo();
@@ -110,10 +112,21 @@ export default {
       } else {
         this.$emit("pause");
       }
+    },
+    // TODO REFACTOR THIS FETCH AND STORE MORE DATA
+    calcTitle(id) {
+      fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0`
+      )
+        .then(d => d.json())
+        .then(data => {
+          this.title = data.items[0].snippet.title;
+          console.log(this.title);
+        });
     }
   },
   watch: {
-    state(val, newVal) {
+    state(val) {
       if (!this.player) {
         return;
       }
@@ -135,10 +148,12 @@ export default {
         this.pauseVideo();
       }
     },
-    videoId() {
+    videoId(id) {
+      console.log(id);
       setTimeout(async () => {
         this.secondsMax = await this.player.getDuration();
       }, 700);
+      this.calcTitle(id);
     }
   },
   computed: {
