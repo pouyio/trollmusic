@@ -18,20 +18,20 @@
           <button class="overlay" @click="togglePlay"></button>
         </div>
       </div>
-       <div class="card-content">
-          <section class="level">
-            <input
-              class="slider is-fullwidth is-circle is-primary is-small"
-              step="1"
-              min="0"
-              :max="secondsMax"
-              type="range"
-              v-model="secondsInternal"
-              @change="changeSeconds"
-            >
-            <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
-          </section>
-        </div>
+      <div class="card-content">
+        <section class="level">
+          <input
+            class="slider is-fullwidth is-circle is-primary is-small"
+            step="1"
+            min="0"
+            :max="secondsMax"
+            type="range"
+            v-model="secondsInternal"
+            @change="changeSeconds"
+          >
+          <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
+        </section>
+      </div>
     </div>
   </section>
 </template>
@@ -135,8 +135,10 @@ export default {
         this.pauseVideo();
       }
     },
-    async videoId() {
-      this.secondsMax = await this.player.getDuration();
+    videoId() {
+      setTimeout(async () => {
+        this.secondsMax = await this.player.getDuration();
+      }, 700);
     }
   },
   computed: {
@@ -163,15 +165,15 @@ export default {
   opacity: 0;
 }
 input[type="range"].slider.is-primary::-moz-range-track {
-  background:  var(--custom-color);
+  background: var(--custom-color);
 }
 
 input[type="range"].slider.is-primary::-webkit-slider-runnable-track {
-  background:  var(--custom-color);
+  background: var(--custom-color);
 }
 
 input[type="range"].slider.is-primary::-ms-track {
-  background:  var(--custom-color) !important;
+  background: var(--custom-color) !important;
 }
 .tag {
   background-color: var(--custom-color);

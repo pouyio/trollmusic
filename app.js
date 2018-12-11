@@ -13,6 +13,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('dist'));
 
+let ended = 0;
+
 io.on('connection', (socket) => {
 
     if (videos.current) {
@@ -39,7 +41,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('add', (video, user) => {
-        videos.current = { id: video, user };
+        videos.add(video, user);
         io.emit('playing', video, user, 0);
     });
 
@@ -58,11 +60,16 @@ io.on('connection', (socket) => {
         io.emit('queue', user, videos.list);
     });
 
-    socket.on('ended', (video) => {
-        videos.removeAndNext(video);
-        io.emit('queue', '', videos.list);
-        if (videos.current) {
-            io.emit('playing', videos.current.id, videos.current.user, 0);
+    socket.on('ended', (video, user) => {
+        ++ended;
+        const users = getUsers();
+        if (ended >= users.length) {
+            videos.removeAndNext(video);
+            io.emit('queue', '', videos.list);
+            if (videos.current) {
+                io.emit('playing', videos.current.id, videos.current.user, 0);
+            }
+            ended = 0;
         }
     });
 

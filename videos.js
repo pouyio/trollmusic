@@ -5,6 +5,12 @@ const videos = {
         // { id: '_kC_xaRs9lM', user: 'pollo3' },
         // { id: 'RvWbcK3YQ_o', user: 'pollo2' }
     ],
+    add(id, user) {
+        this.current = { id: video, user };
+        if (this.current && this.current.id !== id && !this.list.some(v => v.id === id)) {
+            this.list = [{ id, user }, ...this.list];
+        }
+    },
     queue(id, user) {
         if (this.current && this.current.id !== id && !this.list.some(v => v.id === id)) {
             this.list.push({ id, user })
@@ -16,7 +22,7 @@ const videos = {
     removeAndNext(id) {
         this.list = this.list.filter(v => v.id !== id);
         if (this.list.length) {
-            this.current = { ...this.list[0], seconds: 0 };
+            this.current = { ...this.list.shift(), seconds: 0 };
         } else {
             this.current = null;
         }

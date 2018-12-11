@@ -144,7 +144,7 @@ export default {
     },
     ended(video) {
       this.videoId = null;
-      this.$socket.emit("ended", video);
+      this.$socket.emit("ended", video, this.user);
     }
   },
   computed: {
