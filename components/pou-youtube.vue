@@ -1,5 +1,5 @@
 <template>
-  <section style="width: fit-content; margin: auto;">
+  <section style="width: moz-max-content;width: fit-content; margin: auto;">
     <div class="card">
       <div class="card-header">
         <!-- TODO get video title, prob a refactor needed to store it -->
@@ -121,7 +121,6 @@ export default {
         .then(d => d.json())
         .then(data => {
           this.title = data.items[0].snippet.title;
-          console.log(this.title);
         });
     }
   },
@@ -149,7 +148,6 @@ export default {
       }
     },
     videoId(id) {
-      console.log(id);
       setTimeout(async () => {
         this.secondsMax = await this.player.getDuration();
       }, 700);
