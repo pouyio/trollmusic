@@ -13,10 +13,10 @@
     </nav>
     <main class="container column is-fluid">
       <div class="columns">
-        <div class="column is-4">
+        <div class="column is-3">
           <div class="card">
             <div class="card-header">
-              <h1 class="card-header-title title is-centered">👥 Chat</h1>
+              <h1 class="card-header-title title is-centered">💬 Chat</h1>
             </div>
             <div class="card-content" style="padding: .75em">
               <div v-for="(message, index) in messages" :key="index">
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="column is-2">
+        <div class="column is-3">
           <div class="card" v-if="users.length > 1">
             <div class="card-header">
               <h1 class="card-header-title title is-centered">👥 Users</h1>
@@ -146,8 +146,8 @@ export default {
     }
   },
   created() {
-    // this.user = prompt("Write your username");
-    this.user = "pollo" + new Date().getTime();
+    this.user = prompt("Write your username");
+    // this.user = "pollo" + new Date().getTime();
     this.$socket.emit("set-user", this.user);
   },
   methods: {
