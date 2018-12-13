@@ -13,6 +13,30 @@
     </nav>
     <main class="container column is-fluid">
       <div class="columns">
+        <div class="column is-4">
+          <div class="card">
+            <div class="card-header">
+              <h1 class="card-header-title title is-centered">👥 Chat</h1>
+            </div>
+            <div class="card-content" style="padding: .75em">
+              <div v-for="(message, index) in messages" :key="index">
+                <span class="tag is-dark">{{message[0]}}</span>
+                {{message[1]}}
+              </div>
+            </div>
+            <footer class="card-footer">
+              <div class="card-footer-item">
+                <textarea
+                  class="input"
+                  type="text"
+                  placeholder="Send a message..."
+                  v-model="message"
+                  @keyup.enter="submit"
+                ></textarea>
+              </div>
+            </footer>
+          </div>
+        </div>
         <div class="column">
           <pou-youtube
             v-if="videoId"
@@ -23,7 +47,11 @@
             @playing="playing"
             @ended="ended"
           ></pou-youtube>
-          <div class="content has-text-centered" style="width: moz-max-content;width: fit-content; margin: auto;" v-else>
+          <div
+            class="content has-text-centered"
+            style="width: moz-max-content;width: fit-content; margin: auto;"
+            v-else
+          >
             <div class="card" style="overflow: hidden">
               <div class="image">
                 <img src="/ben.jpg" alt="sad ben">
@@ -37,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="column is-narrow">
+        <div class="column is-2">
           <div class="card" v-if="users.length > 1">
             <div class="card-header">
               <h1 class="card-header-title title is-centered">👥 Users</h1>
@@ -54,9 +82,9 @@
         </div>
       </div>
       <section v-if="list.length" class="columns">
-          <div class="column">
-            <pou-list :list="list" @reset="reset"></pou-list>
-          </div>
+        <div class="column">
+          <pou-list :list="list" @reset="reset"></pou-list>
+        </div>
       </section>
     </main>
   </div>
@@ -91,7 +119,9 @@ export default {
       },
       list: [],
       users: [],
-      backgroundImage: 'bg-1'
+      backgroundImage: "bg-1",
+      message: "",
+      messages: []
     };
   },
   sockets: {
@@ -103,18 +133,21 @@ export default {
       this.seconds = seconds;
       this.videoId = null;
       // TODO force removing component from dom
-      setTimeout(() => this.videoId = video, 500);
+      setTimeout(() => (this.videoId = video), 500);
     },
     queue([user, list]) {
       this.list = list;
     },
     users(users) {
       this.users = users;
+    },
+    message([user, message]) {
+      this.messages.push([user, message]);
     }
   },
   created() {
-    this.user = prompt('Write your username');
-    // this.user = "pollo" + new Date().getTime();
+    // this.user = prompt("Write your username");
+    this.user = "pollo" + new Date().getTime();
     this.$socket.emit("set-user", this.user);
   },
   methods: {
@@ -141,11 +174,15 @@ export default {
       this.$socket.emit("ended", video, this.user);
     },
     toggleBackground() {
-      const body = document.querySelector('body');
-      const classToAdd = body.classList.contains('bg-1') ? 'bg-2' : 'bg-1';
-      const classToRemove = classToAdd === 'bg-1' ? 'bg-2' : 'bg-1';
+      const body = document.querySelector("body");
+      const classToAdd = body.classList.contains("bg-1") ? "bg-2" : "bg-1";
+      const classToRemove = classToAdd === "bg-1" ? "bg-2" : "bg-1";
       body.classList.remove(classToRemove);
       body.classList.add(classToAdd);
+    },
+    submit() {
+      this.$socket.emit("message", this.user, this.message);
+      this.message = "";
     }
   },
   computed: {

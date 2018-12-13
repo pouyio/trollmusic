@@ -59,6 +59,10 @@ io.on('connection', (socket) => {
         videos.reset();
         io.emit('queue', user, videos.list);
     });
+    
+    socket.on('message', (user, message) => {
+        io.emit('message', user, message);
+      })
 
     socket.on('ended', (video, user) => {
         ++ended;
