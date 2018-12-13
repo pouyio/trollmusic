@@ -101,7 +101,9 @@ export default {
     playing([video, user, seconds]) {
       this.state = true;
       this.seconds = seconds;
-      this.videoId = video;
+      this.videoId = null;
+      // TODO force removing component from dom
+      setTimeout(() => this.videoId = video, 500);
     },
     queue([user, list]) {
       this.list = list;
