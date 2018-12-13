@@ -1,20 +1,23 @@
 :root {
     --custom-color: #ffbc6b;
+    --background-image-1: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
+    --background-image-2: url("lol.gif");
 }
 
 .card {
     border-radius: 5px;
 }
 
-body {
-    background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
-    /* background-image: url('lol.gif');
-    url("https://www.toptal.com/designers/subtlepatterns/patterns/dust_scratches.png")
-    url("https://www.toptal.com/designers/subtlepatterns/patterns/gravel.png") */
+.bg-1 {
+    background-image: var(--background-image-1);
+}
+.bg-2 {
+    background-image: var(--background-image-2);
 }
 
 footer.footer {
     margin-top: 1.5em;
     border-top: 2px solid var(--custom-color);
+    background-color: white;
     padding: .7em;
 }

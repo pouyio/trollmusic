@@ -14,6 +14,3 @@ new Vue({
     template: '<App/>',
     components: { App }
 });
-
-// TODO
-// change page title on video playing

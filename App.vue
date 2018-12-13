@@ -3,7 +3,7 @@
     <nav class="navbar is-fixed-top columns is-vcentered is-mobile">
       <div class="column is-paddingless">
         <figure class="image">
-          <img @click="modalShow = true" style="width: 5.5em; cursor: pointer" src="/lol.gif">
+          <img @click="toggleBackground" style="width: 5.5em; cursor: pointer" src="/lol.gif">
         </figure>
       </div>
       <div class="column has-text-centered">
@@ -23,7 +23,7 @@
             @playing="playing"
             @ended="ended"
           ></pou-youtube>
-          <div class="content has-text-centered" style="width: fit-content; margin: auto;" v-else>
+          <div class="content has-text-centered" style="width: moz-max-content;width: fit-content; margin: auto;" v-else>
             <div class="card" style="overflow: hidden">
               <div class="image">
                 <img src="/ben.jpg" alt="sad ben">
@@ -59,14 +59,6 @@
           </div>
       </section>
     </main>
-    <div class="modal" :class="{'is-flex': modalShow}" @click="modalShow = false">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <p class="image">
-          <img src="lol.gif">
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -99,7 +91,7 @@ export default {
       },
       list: [],
       users: [],
-      modalShow: false
+      backgroundImage: 'bg-1'
     };
   },
   sockets: {
@@ -145,6 +137,13 @@ export default {
     ended(video) {
       this.videoId = null;
       this.$socket.emit("ended", video, this.user);
+    },
+    toggleBackground() {
+      const body = document.querySelector('body');
+      const classToAdd = body.classList.contains('bg-1') ? 'bg-2' : 'bg-1';
+      const classToRemove = classToAdd === 'bg-1' ? 'bg-2' : 'bg-1';
+      body.classList.remove(classToRemove);
+      body.classList.add(classToAdd);
     }
   },
   computed: {
