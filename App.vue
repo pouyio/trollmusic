@@ -5,6 +5,7 @@
         <figure class="image">
           <img @click="toggleBackground" style="width: 5.5em; cursor: pointer" src="/lol.gif">
         </figure>
+        <button type="button" @click="notify">Show notification</button>
       </div>
       <div class="column has-text-centered">
         <search :user="user" @found="add" @queue="queue"></search>
@@ -151,6 +152,11 @@ export default {
     this.$socket.emit("set-user", this.user);
   },
   methods: {
+     notify () {
+      this.$notification.show('Hello World', {
+        body: 'This is an example!'
+      }, {})
+    },
     pause() {
       this.state = false;
       this.$socket.emit("paused", this.user);
