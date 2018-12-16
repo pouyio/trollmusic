@@ -50,11 +50,11 @@ export default {
     },
     found(video, user) {
       this.results = [];
-      this.$emit("found", video, user);
+      this.$socket.emit("add", video, user);
     },
     queue(video, user) {
       this.results = [];
-      this.$emit("queue", video, user);
+      this.$socket.emit("queue", video, user);
     }
   }
 };

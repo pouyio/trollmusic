@@ -7,7 +7,7 @@
         </figure>
       </div>
       <div class="column has-text-centered">
-        <search :user="user" @found="add" @queue="queue"></search>
+        <search :user="user"></search>
       </div>
       <div class="column has-text-right">👤{{ user }}</div>
     </nav>
@@ -113,8 +113,8 @@ export default {
     }
   },
   created() {
-    this.user = prompt("Write your username");
-    // this.user = "pollo" + new Date().getTime();
+    // this.user = prompt("Write your username");
+    this.user = "pollo" + new Date().getTime();
     this.$socket.emit("set-user", this.user);
   },
   methods: {
@@ -126,12 +126,6 @@ export default {
       this.state = true;
       this.seconds = seconds;
       this.$socket.emit("playing", this.videoId, this.user, seconds);
-    },
-    add(video, user) {
-      this.$socket.emit("add", video, user);
-    },
-    queue(video, user) {
-      this.$socket.emit("queue", video, user);
     },
     reset() {
       this.$socket.emit("reset", this.user);
