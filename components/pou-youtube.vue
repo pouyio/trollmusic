@@ -1,39 +1,58 @@
 <template>
-  <section style="width: moz-max-content;width: fit-content; margin: auto;">
-    <div class="card">
-      <div class="card-header">
-        <!-- TODO get video title, prob a refactor needed to store it -->
-        <h1 class="is-centered card-header-title title">🎥 {{ title }}</h1>
-      </div>
-      <div class="card-image">
-        <div style="position: relative">
-          <youtube
-            ref="youtube"
-            :video-id="videoId"
-            @ready="onReady"
-            @playing="onPlaying"
-            @ended="onEnded"
-            :player-vars="playerVars"
-          ></youtube>
-          <button class="overlay" @click="togglePlay"></button>
+  <div>
+    <section v-if="videoId" style="width: moz-max-content;width: fit-content; margin: auto;">
+      <div class="card">
+        <div class="card-header">
+          <!-- TODO get video title, prob a refactor needed to store it -->
+          <h1 class="is-centered card-header-title title">🎥 {{ title }}</h1>
+        </div>
+        <div class="card-image">
+          <div style="position: relative">
+            <youtube
+              ref="youtube"
+              :video-id="videoId"
+              @ready="onReady"
+              @playing="onPlaying"
+              @ended="onEnded"
+              :player-vars="playerVars"
+            ></youtube>
+            <button class="overlay" @click="togglePlay"></button>
+          </div>
+        </div>
+        <div class="card-content">
+          <section class="level">
+            <input
+              class="slider is-fullwidth is-circle is-primary is-small"
+              step="1"
+              min="0"
+              :max="secondsMax"
+              type="range"
+              v-model="secondsInternal"
+              @change="changeSeconds"
+            >
+            <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
+          </section>
         </div>
       </div>
-      <div class="card-content">
-        <section class="level">
-          <input
-            class="slider is-fullwidth is-circle is-primary is-small"
-            step="1"
-            min="0"
-            :max="secondsMax"
-            type="range"
-            v-model="secondsInternal"
-            @change="changeSeconds"
-          >
-          <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
-        </section>
+    </section>
+    <div
+      class="content has-text-centered"
+      style="width: moz-max-content;width: fit-content; margin: auto;"
+      v-else
+    >
+      <div class="card" style="overflow: hidden">
+        <div class="image">
+          <img src="/ben.jpg" alt="sad ben">
+        </div>
+        <div class="card-content">
+          <h1 class>
+            😱 NO VIDEO YET...
+            <span class="is-size-4">try searching ☝️</span>
+          </h1>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>

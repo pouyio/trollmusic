@@ -18,7 +18,6 @@
         </div>
         <div class="column">
           <pou-youtube
-            v-if="videoId"
             :video-id="videoId"
             :state="state"
             :seconds="seconds"
@@ -26,23 +25,6 @@
             @playing="playing"
             @ended="ended"
           ></pou-youtube>
-          <div
-            class="content has-text-centered"
-            style="width: moz-max-content;width: fit-content; margin: auto;"
-            v-else
-          >
-            <div class="card" style="overflow: hidden">
-              <div class="image">
-                <img src="/ben.jpg" alt="sad ben">
-              </div>
-              <div class="card-content">
-                <h1 class>
-                  😱 NO VIDEO YET...
-                  <span class="is-size-4">try searching ☝️</span>
-                </h1>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="column is-3">
           <div class="card" v-if="users.length > 1">
