@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "video-result",
+  name: "pou-video-result",
   props: ["title", "img", "id", "user"],
   data: () => ({
     styleObj: {

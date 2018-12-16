@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import videoResult from "./video-result.vue";
+import pouVideoResult from "./pou-video-result.vue";
 export default {
-  name: "results",
+  name: "pou-results",
   props: ["videos", "user"],
   components: {
-    videoResult
+    pouVideoResult
   },
   methods: {
     found(video, user) {

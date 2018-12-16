@@ -7,7 +7,7 @@
         </figure>
       </div>
       <div class="column has-text-centered">
-        <search :user="user"></search>
+        <pou-search :user="user"></pou-search>
       </div>
       <div class="column has-text-right">👤{{ user }}</div>
     </nav>
@@ -17,14 +17,7 @@
           <pou-chat :user="user" :active="!!videoId"></pou-chat>
         </div>
         <div class="column">
-          <pou-youtube
-            :video-id="videoId"
-            :state="state"
-            :seconds="seconds"
-            @pause="pause"
-            @playing="playing"
-            @ended="ended"
-          ></pou-youtube>
+          <pou-youtube></pou-youtube>
         </div>
         <div class="column is-3">
           <div class="card" v-if="users.length > 1">
@@ -42,9 +35,9 @@
           </div>
         </div>
       </div>
-      <section v-if="list.length" class="columns">
+      <section class="columns">
         <div class="column">
-          <pou-list :list="list" @reset="reset"></pou-list>
+          <pou-list :user="user"></pou-list>
         </div>
       </section>
     </main>
@@ -52,7 +45,7 @@
 </template>
 
 <script>
-import search from "./components/search.vue";
+import pouSearch from "./components/pou-search.vue";
 import pouYoutube from "./components/pou-youtube.vue";
 import pouList from "./components/pou-list.vue";
 import pouChat from "./components/pou-chat.vue";
@@ -60,7 +53,7 @@ import pouChat from "./components/pou-chat.vue";
 export default {
   name: "App",
   components: {
-    search,
+    pouSearch,
     pouYoutube,
     pouList,
     pouChat
@@ -68,28 +61,12 @@ export default {
   data() {
     return {
       videoId: "",
-      seconds: 0,
-      state: 0,
       user: "",
-      list: [],
       users: [],
       backgroundImage: "bg-1"
     };
   },
   sockets: {
-    paused(user) {
-      this.state = false;
-    },
-    playing([video, user, seconds]) {
-      this.state = true;
-      this.seconds = seconds;
-      this.videoId = null;
-      // TODO force removing component from dom
-      setTimeout(() => (this.videoId = video), 500);
-    },
-    queue([user, list]) {
-      this.list = list;
-    },
     users(users) {
       this.users = users;
     }
@@ -100,22 +77,6 @@ export default {
     this.$socket.emit("set-user", this.user);
   },
   methods: {
-    pause() {
-      this.state = false;
-      this.$socket.emit("paused", this.user);
-    },
-    playing(seconds) {
-      this.state = true;
-      this.seconds = seconds;
-      this.$socket.emit("playing", this.videoId, this.user, seconds);
-    },
-    reset() {
-      this.$socket.emit("reset", this.user);
-    },
-    ended(video) {
-      this.videoId = null;
-      this.$socket.emit("ended", video, this.user);
-    },
     toggleBackground() {
       const body = document.querySelector("body");
       const classToAdd = body.classList.contains("bg-1") ? "bg-2" : "bg-1";

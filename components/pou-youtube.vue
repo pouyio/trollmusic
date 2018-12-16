@@ -11,10 +11,10 @@
             <youtube
               ref="youtube"
               :video-id="videoId"
+              :player-vars="playerVars"
               @ready="onReady"
               @playing="onPlaying"
               @ended="onEnded"
-              :player-vars="playerVars"
             ></youtube>
             <button class="overlay" @click="togglePlay"></button>
           </div>
@@ -59,7 +59,6 @@
 import format from "format-duration";
 export default {
   name: "pou-youtube",
-  props: ["videoId", "seconds", "state"],
   data() {
     return {
       playerVars: {
@@ -71,17 +70,41 @@ export default {
         rel: 0
       },
       player: null,
-      isPendingToSeek: true,
+      isFirstTime: true,
       interval: null,
       secondsInternal: 0,
       secondsMax: 0,
-      title: ""
+      title: "",
+      videoId: ""
     };
+  },
+  sockets: {
+    paused(user) {
+      console.log("SOCKET - pause");
+      this.pauseVideo();
+      this.state = false;
+    },
+    playing([video, user, seconds]) {
+      console.log("SOCKET - playing");
+      this.state = true;
+      this.videoId = video;
+      this.seconds = seconds;
+      this.calcTitle(this.videoId);
+      if (this.player) {
+        this.player.seekTo(this.seconds, true);
+        this.playVideo();
+      }
+      // TODO force removing component from dom
+      setTimeout(async () => {
+        this.secondsMax = await this.player.getDuration();
+      }, 700);
+    }
   },
   methods: {
     playVideo() {
+      console.log("playVideo");
       clearInterval(this.interval);
-      this.interval = setInterval(() => this.updateProgress(), 1000);
+      this.interval = setInterval(this.updateProgress, 1000);
       this.player.playVideo();
     },
     pauseVideo() {
@@ -89,18 +112,20 @@ export default {
       this.player.pauseVideo();
     },
     async onReady(event) {
+      console.log("onReady");
       this.player = event.target;
       this.calcTitle(this.videoId);
-      this.secondsMax = await this.player.getDuration();
       if (this.state) {
         this.playVideo();
       } else {
         this.pauseVideo();
       }
+      this.secondsMax = await this.player.getDuration();
     },
     onPlaying() {
-      if (this.state && this.isPendingToSeek) {
-        this.isPendingToSeek = false;
+      console.log("onPlaying");
+      if (this.state && this.isFirstTime) {
+        this.isFirstTime = false;
         this.player.seekTo(this.seconds, true);
         clearInterval(this.interval);
         this.secondsInternal = this.seconds;
@@ -108,8 +133,10 @@ export default {
       }
     },
     onEnded() {
+      console.log("onEnded");
       clearInterval(this.interval);
-      this.$emit("ended", this.videoId);
+      this.$socket.emit("ended", this.videoId, this.user);
+      this.videoId = null;
     },
     async updateProgress() {
       this.secondsInternal = await this.player.getCurrentTime();
@@ -118,18 +145,30 @@ export default {
       const state = await this.player.getPlayerState();
       if (state === 1) {
         this.pauseVideo();
-        this.$emit("pause");
+        this.$socket.emit("paused", this.user);
+        this.state = false;
       } else {
         this.playVideo();
-        this.$emit("playing", await this.player.getCurrentTime());
+        this.$socket.emit(
+          "playing",
+          this.videoId,
+          this.user,
+          await this.player.getCurrentTime()
+        );
+        this.state = true;
       }
     },
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
       if (this.state) {
-        this.$emit("playing", this.secondsInternal);
+        this.$socket.emit(
+          "playing",
+          this.videoId,
+          this.user,
+          this.secondsInternal
+        );
       } else {
-        this.$emit("pause");
+        this.$socket.emit("paused", this.user);
       }
     },
     // TODO REFACTOR THIS FETCH AND STORE MORE DATA
@@ -165,12 +204,6 @@ export default {
       } else {
         this.pauseVideo();
       }
-    },
-    videoId(id) {
-      setTimeout(async () => {
-        this.secondsMax = await this.player.getDuration();
-      }, 700);
-      this.calcTitle(id);
     }
   },
   computed: {

@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import results from "./results";
+import pouResults from "./pou-results";
 import debounce from "../utils/debounce";
 const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
 export default {
-  name: "search",
+  name: "pou-search",
   props: ["user"],
   components: {
-    results
+    pouResults
   },
   data: function() {
     return {
