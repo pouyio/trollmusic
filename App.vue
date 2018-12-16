@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar is-fixed-top columns is-vcentered is-mobile">
+    <nav class="navbar is-fixed-top columns is-vcentered is-mobile" style="border-bottom: 0.2em solid var(--custom-color);">
       <div class="column is-paddingless">
         <figure class="image">
           <img @click="toggleBackground" style="width: 5.5em; cursor: pointer" src="/lol.gif">
@@ -14,28 +14,7 @@
     <main class="container column is-fluid">
       <div class="columns">
         <div class="column is-3">
-          <div class="card">
-            <div class="card-header">
-              <h1 class="card-header-title title is-centered">💬 Chat</h1>
-            </div>
-            <div class="card-content" style="padding: .75em">
-              <div v-for="(message, index) in messages" :key="index">
-                <span class="tag is-dark">{{message[0]}}</span>
-                {{message[1]}}
-              </div>
-            </div>
-            <footer class="card-footer">
-              <div class="card-footer-item">
-                <textarea
-                  class="input"
-                  type="text"
-                  placeholder="Send a message..."
-                  v-model="message"
-                  @keyup.enter="submit"
-                ></textarea>
-              </div>
-            </footer>
-          </div>
+          <pou-chat :user="user" :active="!!videoId"></pou-chat>
         </div>
         <div class="column">
           <pou-youtube
@@ -94,13 +73,15 @@
 import search from "./components/search.vue";
 import pouYoutube from "./components/pou-youtube.vue";
 import pouList from "./components/pou-list.vue";
+import pouChat from "./components/pou-chat.vue";
 
 export default {
   name: "App",
   components: {
     search,
     pouYoutube,
-    pouList
+    pouList,
+    pouChat
   },
   data() {
     return {
@@ -108,20 +89,9 @@ export default {
       seconds: 0,
       state: 0,
       user: "",
-      percentage: 0,
-      percentageShow: 0,
-      playerVars: {
-        controls: 1,
-        disablekb: 1,
-        modestbranding: 1,
-        showinfo: 0,
-        rel: 0
-      },
       list: [],
       users: [],
-      backgroundImage: "bg-1",
-      message: "",
-      messages: []
+      backgroundImage: "bg-1"
     };
   },
   sockets: {
@@ -140,9 +110,6 @@ export default {
     },
     users(users) {
       this.users = users;
-    },
-    message([user, message]) {
-      this.messages.push([user, message]);
     }
   },
   created() {
@@ -179,10 +146,6 @@ export default {
       const classToRemove = classToAdd === "bg-1" ? "bg-2" : "bg-1";
       body.classList.remove(classToRemove);
       body.classList.add(classToAdd);
-    },
-    submit() {
-      this.$socket.emit("message", this.user, this.message);
-      this.message = "";
     }
   },
   computed: {
@@ -192,14 +155,5 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.column {
-  padding-bottom: 0;
-}
-.navbar {
-  border-bottom: 0.2em solid var(--custom-color);
-}
-</style>
 
 
