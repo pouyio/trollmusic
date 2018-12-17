@@ -10,6 +10,7 @@
           <div style="position: relative">
             <youtube
               ref="youtube"
+              player-width="100%"
               :key="videoId"
               :video-id="videoId"
               :player-vars="playerVars"
