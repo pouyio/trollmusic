@@ -10,10 +10,10 @@
           <div style="position: relative">
             <youtube
               ref="youtube"
+              :key="videoId"
               :video-id="videoId"
               :player-vars="playerVars"
               @ready="onReady"
-              @playing="onPlaying"
               @ended="onEnded"
             ></youtube>
             <button class="overlay" @click="togglePlay"></button>
@@ -70,7 +70,6 @@ export default {
         rel: 0
       },
       player: null,
-      isFirstTime: true,
       interval: null,
       secondsInternal: 0,
       secondsMax: 0,
@@ -88,15 +87,16 @@ export default {
       console.log("SOCKET - playing");
       this.state = true;
       this.videoId = video;
-      this.$emit("active", true);
       this.seconds = seconds;
+      this.$emit("active", true);
       this.calcTitle(this.videoId);
+      // TODO refactor to avoid checking if player is available
       if (this.player) {
         this.player.seekTo(this.seconds, true);
         this.playVideo();
       }
-      // TODO force removing component from dom
       setTimeout(async () => {
+        // TODO not working properly
         this.secondsMax = await this.player.getDuration();
       }, 700);
     }
@@ -122,16 +122,6 @@ export default {
         this.pauseVideo();
       }
       this.secondsMax = await this.player.getDuration();
-    },
-    onPlaying() {
-      console.log("onPlaying");
-      if (this.state && this.isFirstTime) {
-        this.isFirstTime = false;
-        this.player.seekTo(this.seconds, true);
-        clearInterval(this.interval);
-        this.secondsInternal = this.seconds;
-        this.interval = setInterval(() => this.updateProgress(), 1000);
-      }
     },
     onEnded() {
       console.log("onEnded");
@@ -182,30 +172,6 @@ export default {
         .then(data => {
           this.title = data.items[0].snippet.title;
         });
-    }
-  },
-  watch: {
-    state(val) {
-      if (!this.player) {
-        return;
-      }
-      if (val) {
-        this.player.seekTo(this.secondsInternal, true);
-        this.playVideo();
-      } else {
-        this.pauseVideo();
-      }
-    },
-    async seconds(seconds) {
-      if (!this.player) {
-        return;
-      }
-      this.player.seekTo(seconds, true);
-      if (this.state) {
-        this.playVideo();
-      } else {
-        this.pauseVideo();
-      }
     }
   },
   computed: {
