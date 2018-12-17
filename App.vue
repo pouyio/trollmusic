@@ -1,6 +1,9 @@
 <template>
   <div>
-    <nav class="navbar is-fixed-top columns is-vcentered is-mobile" style="border-bottom: 0.2em solid var(--custom-color);">
+    <nav
+      class="navbar is-fixed-top columns is-vcentered is-mobile"
+      style="border-bottom: 0.2em solid var(--custom-color);"
+    >
       <div class="column is-paddingless">
         <figure class="image">
           <img @click="toggleBackground" style="width: 5.5em; cursor: pointer" src="/lol.gif">
@@ -14,10 +17,10 @@
     <main class="container column is-fluid">
       <div class="columns">
         <div class="column is-3">
-          <pou-chat :user="user" :active="!!videoId"></pou-chat>
+          <pou-chat :user="user" :active="active"></pou-chat>
         </div>
         <div class="column">
-          <pou-youtube></pou-youtube>
+          <pou-youtube @active="onActive"></pou-youtube>
         </div>
         <div class="column is-3">
           <div class="card" v-if="users.length > 1">
@@ -60,7 +63,7 @@ export default {
   },
   data() {
     return {
-      videoId: "",
+      active: false,
       user: "",
       users: [],
       backgroundImage: "bg-1"
@@ -83,6 +86,9 @@ export default {
       const classToRemove = classToAdd === "bg-1" ? "bg-2" : "bg-1";
       body.classList.remove(classToRemove);
       body.classList.add(classToAdd);
+    },
+    onActive(status) {
+      this.active = status;
     }
   },
   computed: {

@@ -88,6 +88,7 @@ export default {
       console.log("SOCKET - playing");
       this.state = true;
       this.videoId = video;
+      this.$emit("active", true);
       this.seconds = seconds;
       this.calcTitle(this.videoId);
       if (this.player) {
@@ -137,6 +138,7 @@ export default {
       clearInterval(this.interval);
       this.$socket.emit("ended", this.videoId, this.user);
       this.videoId = null;
+      this.$emit("active", false);
     },
     async updateProgress() {
       this.secondsInternal = await this.player.getCurrentTime();

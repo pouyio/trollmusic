@@ -8,7 +8,7 @@
         placeholder="🔍 Search video..."
       >
     </div>
-    <results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></results>
+    <pou-results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></pou-results>
   </div>
 </template>
 

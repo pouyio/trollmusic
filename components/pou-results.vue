@@ -1,6 +1,6 @@
 <template>
   <ul class="is-flex">
-    <video-result
+    <pou-result
       v-for="video in videos"
       :key="video.id.videoId"
       :title="video.snippet.title"
@@ -9,17 +9,17 @@
       :user="user"
       @found="found"
       @queue="queue"
-    ></video-result>
+    ></pou-result>
   </ul>
 </template>
 
 <script>
-import pouVideoResult from "./pou-video-result.vue";
+import pouResult from "./pou-result.vue";
 export default {
   name: "pou-results",
   props: ["videos", "user"],
   components: {
-    pouVideoResult
+    pouResult
   },
   methods: {
     found(video, user) {
