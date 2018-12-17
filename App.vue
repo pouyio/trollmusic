@@ -1,18 +1,19 @@
 <template>
   <div>
     <nav
-      class="navbar is-fixed-top columns is-vcentered is-mobile"
-      style="border-bottom: 0.2em solid var(--custom-color);"
+      class="navbar is-fixed-top"
+      style="border-bottom: 0.2em solid var(--custom-color); min-height: auto"
     >
-      <div class="column is-paddingless">
+      <div
+        class="is-flex"
+        style="width: 100%; align-items: center; justify-content: space-between;"
+      >
         <figure class="image">
-          <img @click="toggleBackground" style="width: 5.5em; cursor: pointer" src="/lol.gif">
+          <img @click="toggleBackground" style="width: 3.3em; cursor: pointer" src="/lol.gif">
         </figure>
+        <pou-search style="width: 40vw; position: inherit;" :user="user"></pou-search>
+        <div class="navbar-item">👤{{ user }}</div>
       </div>
-      <div class="column has-text-centered">
-        <pou-search :user="user"></pou-search>
-      </div>
-      <div class="column has-text-right">👤{{ user }}</div>
     </nav>
     <main class="container column is-fluid">
       <div class="columns">

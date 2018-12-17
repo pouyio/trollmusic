@@ -34,12 +34,12 @@ export default {
 
 <style scoped>
 ul {
-  --nav-height: 4.2em;
+  --nav-height: 2.7em;
   position: absolute;
-  top: 4.2em;
+  top: var(--nav-height);
   width: 84vw;
   left: 6vw;
-  max-height: calc(100vh - 4.2em);
+  max-height: calc(100vh - var(--nav-height));
   overflow-y: auto;
   flex-wrap: wrap;
   background-color: var(--custom-color);

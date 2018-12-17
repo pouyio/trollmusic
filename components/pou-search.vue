@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="control">
+    <div class="control" style="width: 100%">
       <input
         v-model="searchText"
-        class="input is-rounded has-text-centered"
+        class="input is-rounded has-text-centered is-small"
         type="text"
         placeholder="🔍 Search video..."
       >

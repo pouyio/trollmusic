@@ -1,7 +1,5 @@
 :root {
     --custom-color: #ffbc6b;
-    --background-image-1: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
-    --background-image-2: url("lol.gif");
 }
 
 .card {
@@ -9,15 +7,14 @@
 }
 
 .bg-1 {
-    background-image: var(--background-image-1);
+    background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
 }
 .bg-2 {
-    background-image: var(--background-image-2);
+    background-image: url("lol.gif");
 }
 
 footer.footer {
     margin-top: 1.5em;
     border-top: 2px solid var(--custom-color);
-    background-color: white;
     padding: .7em;
 }
