@@ -24,19 +24,7 @@
           <pou-youtube @active="onActive"></pou-youtube>
         </div>
         <div class="column is-3">
-          <div class="card" v-if="users.length > 1">
-            <div class="card-header">
-              <h1 class="card-header-title title is-centered">👥 Users</h1>
-            </div>
-            <div class="card-content">
-              <p v-for="user of otherUsers" :key="user.user">{{ user.user }}</p>
-            </div>
-          </div>
-          <div class="card" v-else>
-            <div class="card-header">
-              <h1 class="card-header-title title is-centered">No users ☹️</h1>
-            </div>
-          </div>
+          <pou-users :user="user"></pou-users>
         </div>
       </div>
       <section class="columns">
@@ -53,6 +41,7 @@ import pouSearch from "./components/pou-search.vue";
 import pouYoutube from "./components/pou-youtube.vue";
 import pouList from "./components/pou-list.vue";
 import pouChat from "./components/pou-chat.vue";
+import pouUsers from "./components/pou-users.vue";
 
 export default {
   name: "App",
@@ -60,20 +49,15 @@ export default {
     pouSearch,
     pouYoutube,
     pouList,
-    pouChat
+    pouChat,
+    pouUsers
   },
   data() {
     return {
       active: false,
       user: "",
-      users: [],
       backgroundImage: "bg-1"
     };
-  },
-  sockets: {
-    users(users) {
-      this.users = users;
-    }
   },
   created() {
     // this.user = prompt("Write your username");
@@ -90,11 +74,6 @@ export default {
     },
     onActive(status) {
       this.active = status;
-    }
-  },
-  computed: {
-    otherUsers() {
-      return this.users.filter(u => u.user !== this.user);
     }
   }
 };
