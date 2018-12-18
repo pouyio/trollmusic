@@ -7,7 +7,7 @@ import 'bulma-slider/dist/css/bulma-slider.min.css'
 import App from './App.vue';
 
 Vue.use(VueYouTubeEmbed)
-Vue.use(new VueSocketIO({ connection: window.location.href }));
+Vue.use(new VueSocketIO({ connection: "localhost:8080" }));
 
 new Vue({
     el: "#app",
