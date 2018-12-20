@@ -46,7 +46,7 @@
           <img src="/ben.jpg" alt="sad ben">
         </div>
         <div class="card-content">
-          <h1 class>
+          <h1 class="column is-marginless">
             😱 NO VIDEO YET...
             <span class="is-size-4">try searching ☝️</span>
           </h1>
