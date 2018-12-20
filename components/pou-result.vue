@@ -24,10 +24,10 @@ export default {
   }),
   methods: {
     addVideo() {
-      this.$emit("found", this.id, this.user);
+      this.$emit("add", this.id, this.title, this.user);
     },
     queueVideo() {
-      this.$emit("queue", this.id, this.user);
+      this.$emit("queue", this.id, this.title, this.user);
     }
   }
 };

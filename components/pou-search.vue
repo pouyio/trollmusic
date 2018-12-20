@@ -8,7 +8,7 @@
         placeholder="🔍 Search video..."
       >
     </div>
-    <pou-results v-if="results.length" :videos="results" :user="user" @found="found" @queue="queue"></pou-results>
+    <pou-results v-if="results.length" :videos="results" :user="user" @add="add" @queue="queue"></pou-results>
   </div>
 </template>
 
@@ -48,13 +48,13 @@ export default {
     appendVideos(videos) {
       this.results = videos;
     },
-    found(video, user) {
+    add(video, title, user) {
       this.results = [];
-      this.$socket.emit("add", video, user);
+      this.$socket.emit("add", { video, title, user });
     },
-    queue(video, user) {
+    queue(video, title, user) {
       this.results = [];
-      this.$socket.emit("queue", video, user);
+      this.$socket.emit("queue", { video, title, user });
     }
   }
 };

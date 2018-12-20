@@ -7,7 +7,7 @@
       :img="video.snippet.thumbnails.default.url"
       :id="video.id.videoId"
       :user="user"
-      @found="found"
+      @add="add"
       @queue="queue"
     ></pou-result>
   </ul>
@@ -22,11 +22,11 @@ export default {
     pouResult
   },
   methods: {
-    found(video, user) {
-      this.$emit("found", video, user);
+    add(video, title, user) {
+      this.$emit("add", video, title, user);
     },
-    queue(video, user) {
-      this.$emit("queue", video, user);
+    queue(video, title, user) {
+      this.$emit("queue", video, title, user);
     }
   }
 };

@@ -1,10 +1,12 @@
 <template>
   <div>
-    <section v-if="videoId" style="width: moz-max-content;width: fit-content; margin: auto;">
+    <section v-if="videoId">
       <div class="card">
         <div class="card-header">
-          <!-- TODO get video title, prob a refactor needed to store it -->
-          <h1 class="is-centered card-header-title title">🎥 {{ title }}</h1>
+          <div class="" style="flex-direction: column;">
+            <p class="card-header-title title is-marginless">🎥 {{ title }}</p>
+            <p class="card-header-title">{{ user }}</p>
+          </div>
         </div>
         <div class="card-image">
           <div style="position: relative">
@@ -36,17 +38,15 @@
         </div>
       </div>
     </section>
-    <div
-      class="content has-text-centered"
-      style="width: moz-max-content;width: fit-content; margin: auto;"
-      v-else
-    >
+    <div class="has-text-centered" v-else>
       <div class="card" style="overflow: hidden">
-        <div class="image">
-          <img src="/ben.jpg" alt="sad ben">
+        <div class="card-image">
+          <figure class="image">
+            <img src="/ben.jpg" alt="sad ben">
+          </figure>
         </div>
-        <div class="card-content">
-          <h1 class="column is-marginless">
+        <div class="card-content is-paddingless">
+          <h1 class="title column">
             😱 NO VIDEO YET...
             <span class="is-size-4">try searching ☝️</span>
           </h1>
@@ -75,22 +75,22 @@ export default {
       secondsInternal: 0,
       secondsMax: 0,
       title: "",
-      videoId: ""
+      videoId: "",
+      user: ""
     };
   },
   sockets: {
     paused(user) {
-      console.log("SOCKET - pause");
       this.pauseVideo();
       this.state = false;
     },
-    playing([video, user, seconds]) {
-      console.log("SOCKET - playing");
+    playing({ video, title, user, seconds }) {
       this.state = true;
       this.videoId = video;
       this.seconds = seconds;
+      this.title = title;
+      this.user = user;
       this.$emit("active", true);
-      this.calcTitle(this.videoId);
       // TODO refactor to avoid checking if player is available
       if (this.player) {
         this.player.seekTo(this.seconds, true);
@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     playVideo() {
-      console.log("playVideo");
       clearInterval(this.interval);
       this.interval = setInterval(this.updateProgress, 1000);
       this.player.playVideo();
@@ -114,9 +113,7 @@ export default {
       this.player.pauseVideo();
     },
     async onReady(event) {
-      console.log("onReady");
       this.player = event.target;
-      this.calcTitle(this.videoId);
       if (this.state) {
         this.playVideo();
       } else {
@@ -125,7 +122,6 @@ export default {
       this.secondsMax = await this.player.getDuration();
     },
     onEnded() {
-      console.log("onEnded");
       clearInterval(this.interval);
       this.$socket.emit("ended", this.videoId, this.user);
       this.videoId = null;
@@ -142,37 +138,25 @@ export default {
         this.state = false;
       } else {
         this.playVideo();
-        this.$socket.emit(
-          "playing",
-          this.videoId,
-          this.user,
-          await this.player.getCurrentTime()
-        );
+        this.$socket.emit("playing", {
+          video: this.videoId,
+          user: this.user,
+          seconds: await this.player.getCurrentTime()
+        });
         this.state = true;
       }
     },
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
       if (this.state) {
-        this.$socket.emit(
-          "playing",
-          this.videoId,
-          this.user,
-          this.secondsInternal
-        );
+        this.$socket.emit("playing", {
+          video: this.videoId,
+          user: this.user,
+          seconds: this.secondsInternal
+        });
       } else {
         this.$socket.emit("paused", this.user);
       }
-    },
-    // TODO REFACTOR THIS FETCH AND STORE MORE DATA
-    calcTitle(id) {
-      fetch(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0`
-      )
-        .then(d => d.json())
-        .then(data => {
-          this.title = data.items[0].snippet.title;
-        });
     }
   },
   computed: {

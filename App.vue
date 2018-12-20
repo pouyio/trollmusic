@@ -60,8 +60,8 @@ export default {
     };
   },
   created() {
-    // this.user = prompt("Write your username");
-    this.user = "pollo" + new Date().getTime();
+    this.user = prompt("Write your username");
+    // this.user = "pollo" + new Date().getTime();
     this.$socket.emit("set-user", this.user);
   },
   methods: {

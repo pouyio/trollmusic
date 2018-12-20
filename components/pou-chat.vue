@@ -36,12 +36,12 @@ export default {
   },
   methods: {
     submit() {
-      this.$socket.emit("message", this.user, this.message);
+      this.$socket.emit("message", { user: this.user, message: this.message });
       this.message = "";
     }
   },
   sockets: {
-    message([user, message]) {
+    message({ user, message }) {
       this.messages.push([user, message]);
     }
   },

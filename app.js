@@ -18,7 +18,7 @@ let ended = 0;
 io.on('connection', (socket) => {
 
     if (videos.current) {
-        socket.emit('playing', videos.current.id, videos.current.user, videos.current.seconds);
+        socket.emit('playing', videos.current);
     }
 
     if (videos.list.length) {
@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     }
 
     socket.emit('users', getUsers());
-    
+
     socket.on('set-user', (user) => {
         socket.data = { user };
         io.emit('users', getUsers());
@@ -36,22 +36,22 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('paused', user);
     });
 
-    socket.on('playing', (video, user, seconds) => {
-        socket.broadcast.emit('playing', video, user, seconds);
+    socket.on('playing', ({ video, user, seconds }) => {
+        socket.broadcast.emit('playing', { video, user, seconds });
     });
 
-    socket.on('add', (video, user) => {
-        videos.add(video, user);
-        io.emit('playing', video, user, 0);
+    socket.on('add', ({ video, title, user }) => {
+        videos.add({ video, title, user });
+        io.emit('playing', { video, title, user, seconds: 0 });
     });
 
-    socket.on('queue', (video, user) => {
+    socket.on('queue', ({ video, title, user }) => {
         if (!videos.current) {
-            videos.current = { id: video, user };
-            io.emit('playing', video, user, 0);
+            videos.current = { video, title, user };
+            io.emit('playing', { video, title, user, seconds: 0 });
             return;
         }
-        videos.queue(video, user);
+        videos.queue({ video, title, user });
         io.emit('queue', user, videos.list);
     });
 
@@ -59,10 +59,10 @@ io.on('connection', (socket) => {
         videos.reset();
         io.emit('queue', user, videos.list);
     });
-    
-    socket.on('message', (user, message) => {
-        io.emit('message', user, message);
-      })
+
+    socket.on('message', ({ user, message }) => {
+        io.emit('message', { user, message });
+    })
 
     socket.on('ended', (video, user) => {
         ++ended;
@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
             videos.removeAndNext(video);
             io.emit('queue', '', videos.list);
             if (videos.current) {
-                io.emit('playing', videos.current.id, videos.current.user, 0);
+                io.emit('playing', videos.current);
             }
             ended = 0;
         }
@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         io.emit('users', getUsers());
-      });
+    });
 });
 
 function getUsers() {

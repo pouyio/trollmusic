@@ -1,16 +1,23 @@
 <template>
   <div v-if="list.length">
     <button class="button" @click="reset">Reset ❌</button>
-    <ul class="is-flex" style="list-style: none; padding: 0; flex-wrap: wrap">
-      <li v-for="video in list" :key="video.id" style="display: flex; flex-direction: column">
-        <img
-          v-bind:src="'https://i.ytimg.com/vi/' + video.id + '/default.jpg'"
-          alt
-          style="max-width: 150px"
-        >
-        <span style="background: white">{{video.user}}</span>
-      </li>
-    </ul>
+    <div class="is-flex">
+      <div v-for="video in list" :key="video.video" style="width: 10em;margin: .5em;">
+        <div class="card" style="overflow: hidden">
+          <div class="card-image">
+            <figure class="image">
+              <img v-bind:src="'https://i.ytimg.com/vi/' + video.video + '/default.jpg'" alt>
+            </figure>
+          </div>
+          <div class="card-content is-paddingless">
+            <div class="column">
+              <p style="line-height: 1">{{video.title}}</p>
+              <p class="is-size-7">{{video.user}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
