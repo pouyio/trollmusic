@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="control" style="width: 100%">
+    <div>
       <input
         v-model="searchText"
-        class="input is-rounded has-text-centered is-small"
+        class="transition outline-none border border-transparent bg-orange-lighter focus:border-orange-light rounded focus:bg-white focus:shadow-md py-2 pr-4 pl-10 block w-full appearance-none leading-normal"
         type="text"
         placeholder="🔍 Search video..."
       >
