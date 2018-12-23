@@ -13,7 +13,7 @@
       <div class="card-footer-item">
         <textarea
           :disabled="!active"
-          class="input"
+          class="resize-y"
           type="text"
           placeholder="Send a message..."
           v-model="message"
