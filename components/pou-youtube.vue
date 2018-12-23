@@ -41,8 +41,8 @@
     <div class="has-text-centered" v-else>
       <div class="card" style="overflow: hidden">
         <div class="card-image">
-          <figure class="image">
-            <img src="/ben.jpg" alt="sad ben">
+          <figure>
+            <img class="w-full" src="/ben.jpg" alt="sad ben">
           </figure>
         </div>
         <div class="card-content is-paddingless">
