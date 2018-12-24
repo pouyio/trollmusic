@@ -1,6 +1,6 @@
 <template>
   <div class="text-orange-darkest">
-    <nav class="flex bg-white h-16 items-center border-b-2 border-orange-light shadow w-full fixed">
+    <nav class="flex bg-white h-16 items-center border-b-2 border-orange-light shadow w-full fixed z-50">
       <div class="w-full max-w-2xl relative mx-auto md:px-6">
         <div class="flex items-center justify-around">
           <figure class="md:w-1/4 xl:w-1/5 md:px-6 pr-8">
@@ -21,12 +21,8 @@
           <pou-youtube @active="onActive"></pou-youtube>
         </div>
         <div class="flex flex-col p-4 w-full md:w-1/3">
-          <div class="">
-            <pou-users :user="user"></pou-users>
-          </div>
-          <div class="">
-            <pou-chat :user="user" :active="active"></pou-chat>
-          </div>
+            <pou-users class="py-2" :user="user"></pou-users>
+            <pou-chat class="py-2" :user="user" :active="active"></pou-chat>
         </div>
       </section>
       <section class>
