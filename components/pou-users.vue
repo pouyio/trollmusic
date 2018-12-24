@@ -1,8 +1,8 @@
 <template>
   <div class="relative pt-4">
-    <div class="border rounded pt-4 p-2" :class="[users.length < 1 ? 'bg-grey-lighter' : '']">
+    <div class="border rounded pt-4 p-2" :class="[!otherUsers.length ? 'bg-grey-lighter' : '']">
       <h2 class="absolute pin-t bg-white rounded-full px-2">👥</h2>
-      <div v-if="users.length > 1">
+      <div v-if="otherUsers.length">
         <p
           v-for="user of otherUsers"
           :key="user.user"

@@ -1,26 +1,30 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <h1 class="card-header-title title is-centered">💬 Chat</h1>
-    </div>
-    <div class="card-content" v-if="active && messages.length" style="padding: .75em">
-      <div v-for="(message, index) in messages" :key="index">
-        <span class="tag is-dark">{{message[0]}}</span>
-        {{message[1]}}
+  <div class="relative pt-4">
+    <div class="border rounded pt-4 p-2" :class="{'bg-grey-lighter': !active}">
+      <h2 class="absolute pin-t bg-white rounded-full px-2">💬</h2>
+      <div class="overflow-y-auto h-64">
+        <div
+          v-for="(message, index) in messages"
+          :key="index"
+          class="py-1"
+          :class="{'text-right': message[0] === user}"
+        >
+          <span v-if="message[0] !== user" class="text-xs text-orange">{{message[0]}}:</span>
+          {{message[1]}}
+        </div>
       </div>
-    </div>
-    <footer class="card-footer">
-      <div class="card-footer-item">
+      <div class="border-t -mx-2 px-2 pt-2">
         <textarea
           :disabled="!active"
-          class="resize-y"
+          class="resize-y w-full outline-none"
+          :class="{'bg-grey-lighter': !active}"
           type="text"
-          placeholder="Send a message..."
+          :placeholder="active ? 'Send a message...' : 'Play something to send a message'"
           v-model="message"
           @keyup.enter="submit"
         ></textarea>
       </div>
-    </footer>
+    </div>
   </div>
 </template>
 

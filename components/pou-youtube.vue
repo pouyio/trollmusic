@@ -3,10 +3,7 @@
     <section v-if="videoId">
       <div class="card">
         <div class="card-header">
-          <div class="" style="flex-direction: column;">
-            <p class="card-header-title title is-marginless">🎥 {{ title }}</p>
-            <p class="card-header-title">{{ user }}</p>
-          </div>
+          
         </div>
         <div class="card-image">
           <div style="position: relative">
@@ -24,6 +21,10 @@
         </div>
         <div class="card-content">
           <section class="level">
+            <div class="" style="flex-direction: column;">
+            <p class="card-header-title title is-marginless">🎥 {{ title }}</p>
+            <p class="card-header-title">{{ user }}</p>
+          </div>
             <input
               class="slider is-fullwidth is-circle is-primary is-small"
               step="1"
