@@ -7,10 +7,10 @@
           <div
             v-for="(message, index) in messages"
             :key="index"
-            class="py-1"
+            class="py-1 flex flex-col leading-none"
             :class="{'text-right': message[0] === user}"
           >
-            <span v-if="message[0] !== user" class="text-xs text-orange">{{message[0]}}:</span>
+            <span v-if="message[0] !== user" class="text-xs font-light text-orange">{{message[0]}}</span>
             {{message[1]}}
           </div>
         </transition-group>
