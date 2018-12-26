@@ -143,6 +143,7 @@ export default {
         this.$socket.emit("playing", {
           video: this.videoId,
           user: this.user,
+          title: this.title,
           seconds: await this.player.getCurrentTime()
         });
         this.state = true;

@@ -36,8 +36,8 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('paused', user);
     });
 
-    socket.on('playing', ({ video, user, seconds }) => {
-        socket.broadcast.emit('playing', { video, user, seconds });
+    socket.on('playing', ({ video, user, title, seconds }) => {
+        socket.broadcast.emit('playing', { video, user, title, seconds });
     });
 
     socket.on('add', ({ video, title, user }) => {
