@@ -22,9 +22,9 @@
         <div class="w-full md:w-2/3">
           <pou-youtube @active="onActive"></pou-youtube>
         </div>
-        <div class="flex flex-col p-4 w-full md:w-1/3">
-          <pou-users class="py-2" :user="user"></pou-users>
-          <pou-chat class="py-2" :user="user" :active="active"></pou-chat>
+        <div class="flex flex-col px-4 pb-4 md:pt-2 w-full md:w-1/3 justify-between">
+          <pou-users class="py-2 flex-1" :user="user"></pou-users>
+          <pou-chat class="pt-2" :user="user" :active="active"></pou-chat>
         </div>
       </section>
       <section class>
