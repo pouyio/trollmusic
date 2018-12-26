@@ -27,10 +27,8 @@
           <pou-chat class="pt-2" :user="user" :active="active"></pou-chat>
         </div>
       </section>
-      <section class>
-        <div class>
-          <pou-list :user="user"></pou-list>
-        </div>
+      <section class="rounded-lg bg-white shadow mx-2 my-4 xl:mx-0">
+        <pou-list :user="user"></pou-list>
       </section>
     </main>
   </div>

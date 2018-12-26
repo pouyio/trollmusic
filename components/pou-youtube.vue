@@ -14,57 +14,76 @@
         <button class="w-full absolute pin opacity-0 play-cursor" @click="togglePlay"></button>
       </div>
 
-      <div class="relative pt-4 m-4 md:mr-0 mt-2">
+      <pou-bordered :icon="'🎥'" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
+        <div class="flex items-baseline mb-2 md:flex-row flex-col">
+          <h2>{{ title }}</h2>
+          <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
+        </div>
+        <div class="flex items-center">
+          <input
+            class="slider flex-grow"
+            step="1"
+            min="0"
+            :max="secondsMax"
+            type="range"
+            v-model="secondsInternal"
+            @change="changeSeconds"
+          >
+          <span class="ml-2">
+            <span :class="{'rotating': state}">⏳</span>
+            {{timeMax}} / {{time}}
+          </span>
+        </div>
+      </pou-bordered>
+
+      <!-- <div class="relative pt-4 m-4 md:mr-0 mt-2">
         <div class="border rounded pt-4 p-2">
           <h2 class="absolute pin-t bg-white rounded-full px-2">🎥</h2>
-          <section>
-            <div class="flex items-baseline mb-2 md:flex-row flex-col">
-              <h2>{{ title }}</h2>
-              <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
-            </div>
-            <div class="flex items-center">
-              <input
-                class="slider flex-grow"
-                step="1"
-                min="0"
-                :max="secondsMax"
-                type="range"
-                v-model="secondsInternal"
-                @change="changeSeconds"
-              >
-              <span class="ml-2">
-                <span :class="{'rotating': state}">⏳</span>
-                {{timeMax}} / {{time}}
-              </span>
-            </div>
-          </section>
+          <div class="flex items-baseline mb-2 md:flex-row flex-col">
+            <h2>{{ title }}</h2>
+            <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
+          </div>
+          <div class="flex items-center">
+            <input
+              class="slider flex-grow"
+              step="1"
+              min="0"
+              :max="secondsMax"
+              type="range"
+              v-model="secondsInternal"
+              @change="changeSeconds"
+            >
+            <span class="ml-2">
+              <span :class="{'rotating': state}">⏳</span>
+              {{timeMax}} / {{time}}
+            </span>
+          </div>
         </div>
-      </div>
+      </div>-->
     </section>
     <section v-else>
       <figure>
         <img class="w-full" src="/ben.jpg" alt="sad ben">
       </figure>
 
-<!-- TODO fix: flex not recalculating height  -->
-      <div class="relative pt-4 m-4 md:mr-0 mt-2">
-        <div class="border rounded pt-4 p-2">
-          <h2 class="absolute pin-t bg-white rounded-full px-2">😱</h2>
-          <section>
-            <div class="flex items-baseline mb-2 md:flex-row flex-col">
-              <h2 class="mx-auto">NO VIDEO YET...try searching 🔎👆🏼</h2>
-            </div>
-          </section>
+      <!-- TODO fix: flex not recalculating height  -->
+      <pou-bordered :icon="'🎥'" :active="false" class="pt-4 m-4 md:mr-0 mt-2">
+        <div class="flex items-baseline mb-2 md:flex-row flex-col">
+          <h2 class="mx-auto">NO VIDEO YET...try searching 🔎👆🏼</h2>
         </div>
-      </div>
+      </pou-bordered>
     </section>
   </div>
 </template>
 
 <script>
 import format from "format-duration";
+import pouBordered from "./pou-bordered";
 export default {
   name: "pou-youtube",
+  components: {
+    pouBordered
+  },
   data() {
     return {
       playerVars: {

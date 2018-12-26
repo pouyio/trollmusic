@@ -1,5 +1,5 @@
 <template>
-  <ul class="is-flex">
+  <ul class="flex">
     <pou-result
       v-for="video in videos"
       :key="video.id.videoId"
