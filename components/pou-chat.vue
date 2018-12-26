@@ -6,7 +6,7 @@
         <transition-group name="getin">
           <div
             v-for="(message, index) in messages"
-            :key="index"
+            :key="+index"
             class="py-1 flex flex-col leading-none"
             :class="{'text-right': message[0] === user}"
           >
