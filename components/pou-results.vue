@@ -37,7 +37,7 @@ export default {
 
 <style scoped>
 ul {
-  --nav-height: 2.7em;
+  --nav-height: 3.6em;
   top: var(--nav-height);
   width: 84vw;
   left: 6vw;
