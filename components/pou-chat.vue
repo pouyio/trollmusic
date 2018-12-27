@@ -14,7 +14,7 @@
         </div>
       </transition-group>
     </div>
-    <div class="border-t -mx-2 px-2 pt-2">
+    <div class="border-t -mx-2 px-2 pt-2 relative">
       <textarea
         :disabled="!active"
         class="resize-y w-full outline-none"
@@ -24,28 +24,70 @@
         v-model="message"
         @keyup.enter="submit"
       ></textarea>
+      <emoji-picker :search="search">
+        <div
+          class="absolute pin-t pin-r p-2 cursor-pointer emoji-invoker outline-none"
+          slot="emoji-invoker"
+          slot-scope="{ events: { click: clickEvent } }"
+          @click="clickEvent"
+        >
+          <button class="focus:outline-none h-6 w-6 rounded-full">😀</button>
+        </div>
+        <div slot="emoji-picker" slot-scope="{ emojis }">
+          <div
+            class="absolute z-10 border mx-2 p-3 pin-b rounded bg-white shadow t-4 h-64 overflow-y-auto mb-16"
+          >
+            <div class="flex">
+              <input
+                class="flex-1 rounded-full border py-1 px-2 outline-none text-sm"
+                type="text"
+                v-model="search"
+                v-focus
+              >
+            </div>
+            <div v-for="(emojiGroup, category) in emojis" :key="category">
+              <h5 class="text-grey-darker uppercase text-sm cursor-default mb-2 mt-4">{{ category }}</h5>
+              <div class="flex flex-wrap justify-between emojis text-lg">
+                <button
+                  class="p-1 cursor-pointer rounded hover:bg-grey-light focus:outline-none flex items-center justify-center h-6 w-6"
+                  v-for="(emoji, emojiName) in emojiGroup"
+                  :key="emojiName"
+                  @click="append(emoji)"
+                  :title="emojiName"
+                >{{ emoji }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </emoji-picker>
     </div>
   </pou-bordered>
 </template>
 
 <script>
 import pouBordered from "./pou-bordered";
+import EmojiPicker from "vue-emoji-picker";
 export default {
   name: "pou-chat",
   props: ["user", "active"],
   components: {
-    pouBordered
+    pouBordered,
+    EmojiPicker
   },
   data() {
     return {
       message: "",
-      messages: []
+      messages: [],
+      search: ""
     };
   },
   methods: {
     submit() {
       this.$socket.emit("message", { user: this.user, message: this.message });
       this.message = "";
+    },
+    append(emoji) {
+      this.message += emoji;
     }
   },
   sockets: {
@@ -57,6 +99,13 @@ export default {
     active(value) {
       if (!value) {
         this.messages = [];
+      }
+    }
+  },
+  directives: {
+    focus: {
+      inserted(el) {
+        el.focus();
       }
     }
   }
