@@ -1,9 +1,9 @@
+@tailwind preflight;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --custom-color: #ffbc6b;
-}
-
-.card {
-    border-radius: 5px;
 }
 
 .bg-1 {
@@ -13,8 +13,6 @@
     background-image: url("lol.gif");
 }
 
-footer.footer {
-    margin-top: 1.5em;
-    border-top: 2px solid var(--custom-color);
-    padding: .7em;
+.transition {
+    transition: all .1s ease-in;
 }

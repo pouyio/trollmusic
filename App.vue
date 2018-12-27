@@ -1,36 +1,34 @@
 <template>
-  <div>
+  <div class="text-orange-darkest">
     <nav
-      class="navbar is-fixed-top"
-      style="border-bottom: 0.2em solid var(--custom-color); min-height: auto"
+      class="flex bg-white h-16 items-center border-b-2 border-orange-light shadow w-full fixed z-50"
     >
-      <div
-        class="is-flex"
-        style="width: 100%; align-items: center; justify-content: space-between;"
-      >
-        <figure class="image">
-          <img @click="toggleBackground" style="width: 3.3em; cursor: pointer" src="/lol.gif">
-        </figure>
-        <pou-search style="width: 40vw; position: inherit;" :user="user"></pou-search>
-        <div class="navbar-item">👤{{ user }}</div>
+      <div class="w-full max-w-2xl relative mx-auto md:px-6">
+        <div class="flex items-center justify-around">
+          <figure class="md:w-1/4 xl:w-1/5 md:px-6 pr-8">
+            <img @click="toggleBackground" class="cursor-pointer h-16 w-auto" src="/lol.gif">
+          </figure>
+          <pou-search class="md:w-3/4 xl:w-4/5 md:px-6 xl:px-12" :user="user"></pou-search>
+          <div class="md:w-1/4 xl:w-1/5 md:px-6 pl-8 break-words">
+            <p>👤{{ user }}</p>
+          </div>
+        </div>
       </div>
     </nav>
-    <main class="container column is-fluid">
-      <div class="columns">
-        <div class="column is-3">
-          <pou-chat :user="user" :active="active"></pou-chat>
-        </div>
-        <div class="column">
+    <main class="pt-20 max-w-2xl mx-auto">
+      <section
+        class="flex flex-wrap md:flex-no-wrap rounded-lg bg-white overflow-hidden shadow mx-2 xl:mx-0"
+      >
+        <div class="w-full md:w-2/3">
           <pou-youtube @active="onActive"></pou-youtube>
         </div>
-        <div class="column is-3">
-          <pou-users :user="user"></pou-users>
+        <div class="flex flex-col px-4 pb-4 md:pt-2 w-full md:w-1/3 justify-between">
+          <pou-users class="py-2 flex-1" :user="user"></pou-users>
+          <pou-chat class="pt-2" :user="user" :active="active"></pou-chat>
         </div>
-      </div>
-      <section class="columns">
-        <div class="column">
-          <pou-list :user="user"></pou-list>
-        </div>
+      </section>
+      <section class="rounded-lg bg-white shadow mx-2 my-4 xl:mx-0">
+        <pou-list :user="user"></pou-list>
       </section>
     </main>
   </div>
@@ -61,7 +59,7 @@ export default {
   },
   created() {
     this.user = prompt("Write your username");
-    // this.user = "pollo" + new Date().getTime();
+    // this.user = "pollo" + (new Date().getTime() % 100000);
     this.$socket.emit("set-user", this.user);
   },
   methods: {

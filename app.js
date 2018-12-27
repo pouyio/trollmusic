@@ -36,8 +36,8 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('paused', user);
     });
 
-    socket.on('playing', ({ video, user, seconds }) => {
-        socket.broadcast.emit('playing', { video, user, seconds });
+    socket.on('playing', ({ video, user, title, seconds }) => {
+        socket.broadcast.emit('playing', { video, user, title, seconds });
     });
 
     socket.on('add', ({ video, title, user }) => {
@@ -55,8 +55,8 @@ io.on('connection', (socket) => {
         io.emit('queue', user, videos.list);
     });
 
-    socket.on('reset', (user) => {
-        videos.reset();
+    socket.on('remove', (user, videoId) => {
+        videos.remove(videoId);
         io.emit('queue', user, videos.list);
     });
 

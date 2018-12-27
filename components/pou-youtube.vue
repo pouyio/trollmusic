@@ -1,65 +1,65 @@
 <template>
-  <div>
+  <div class="w-full">
     <section v-if="videoId">
-      <div class="card">
-        <div class="card-header">
-          <div class="" style="flex-direction: column;">
-            <p class="card-header-title title is-marginless">🎥 {{ title }}</p>
-            <p class="card-header-title">{{ user }}</p>
-          </div>
-        </div>
-        <div class="card-image">
-          <div style="position: relative">
-            <youtube
-              ref="youtube"
-              player-width="100%"
-              :key="videoId"
-              :video-id="videoId"
-              :player-vars="playerVars"
-              @ready="onReady"
-              @ended="onEnded"
-            ></youtube>
-            <button class="overlay" @click="togglePlay"></button>
-          </div>
-        </div>
-        <div class="card-content">
-          <section class="level">
-            <input
-              class="slider is-fullwidth is-circle is-primary is-small"
-              step="1"
-              min="0"
-              :max="secondsMax"
-              type="range"
-              v-model="secondsInternal"
-              @change="changeSeconds"
-            >
-            <span style="margin-left: 1em;" class="tag is-rounded">⏳ {{timeMax}} / {{time}}</span>
-          </section>
-        </div>
+      <div class="relative">
+        <youtube
+          ref="youtube"
+          player-width="100%"
+          :key="videoId"
+          :video-id="videoId"
+          :player-vars="playerVars"
+          @ready="onReady"
+          @ended="onEnded"
+        ></youtube>
+        <button class="w-full absolute pin opacity-0 play-cursor" @click="togglePlay"></button>
       </div>
+
+      <pou-bordered :icon="'🎥'" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
+        <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
+          <h2>{{ title }}</h2>
+          <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
+        </div>
+        <div class="flex items-center">
+          <input
+            class="slider flex-grow"
+            step="1"
+            min="0"
+            :max="secondsMax"
+            type="range"
+            v-model="secondsInternal"
+            @change="changeSeconds"
+          >
+          <span class="ml-2">
+            <span :class="{'rotating': state}">⏳</span>
+            {{timeMax}} / {{time}}
+          </span>
+        </div>
+      </pou-bordered>
+
     </section>
-    <div class="has-text-centered" v-else>
-      <div class="card" style="overflow: hidden">
-        <div class="card-image">
-          <figure class="image">
-            <img src="/ben.jpg" alt="sad ben">
-          </figure>
+    <section v-else>
+      <figure>
+        <img class="w-full" src="/ben.jpg" alt="sad ben">
+      </figure>
+
+      <!-- TODO fix: flex not recalculating height  -->
+      <pou-bordered :icon="'🎥'" :active="false" class="pt-4 m-4 md:mr-0 mt-2">
+        <div class="flex items-baseline mb-2 md:flex-row flex-col">
+          <h2 class="mx-auto">NO VIDEO YET...try searching 🔎👆🏼</h2>
         </div>
-        <div class="card-content is-paddingless">
-          <h1 class="title column">
-            😱 NO VIDEO YET...
-            <span class="is-size-4">try searching ☝️</span>
-          </h1>
-        </div>
-      </div>
-    </div>
+      </pou-bordered>
+    </section>
   </div>
 </template>
 
 <script>
 import format from "format-duration";
+import pouBordered from "./pou-bordered";
 export default {
   name: "pou-youtube",
+  components: {
+    pouBordered
+  },
   data() {
     return {
       playerVars: {
@@ -69,7 +69,7 @@ export default {
         modestbranding: 1,
         showinfo: 0,
         rel: 0,
-        playsinline: 1 
+        playsinline: 1
       },
       player: null,
       interval: null,
@@ -77,7 +77,8 @@ export default {
       secondsMax: 0,
       title: "",
       videoId: "",
-      user: ""
+      user: "",
+      state: false
     };
   },
   sockets: {
@@ -142,6 +143,7 @@ export default {
         this.$socket.emit("playing", {
           video: this.videoId,
           user: this.user,
+          title: this.title,
           seconds: await this.player.getCurrentTime()
         });
         this.state = true;
@@ -172,32 +174,50 @@ export default {
 </script>
 
 <style scoped>
-.overlay {
-  position: absolute;
+.play-cursor {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='50' height='60' viewport='0 0 100 100' style='fill:black;font-size:30px;'><text y='50%'>⏯</text></svg>")
       16 0,
     auto;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-input[type="range"].slider.is-primary::-moz-range-track {
-  background: var(--custom-color);
 }
 
-input[type="range"].slider.is-primary::-webkit-slider-runnable-track {
-  background: var(--custom-color);
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.8em;
+  height: 0.8rem;
+  border-radius: 100%;
+  background: white;
+  border: 1px solid lightgray;
+  cursor: pointer;
 }
 
-input[type="range"].slider.is-primary::-ms-track {
-  background: var(--custom-color) !important;
+input[type="range"].slider::-moz-range-thumb {
+  width: 0.8em;
+  height: 0.8rem;
+  border-radius: 100%;
+  background: white;
+  border: 1px solid lightgray;
+  cursor: pointer;
 }
-.tag {
-  background-color: var(--custom-color);
+.slider {
+  -webkit-appearance: none;
+  height: 0.43em;
+  border-radius: 100px;
+  background: var(--custom-color);
+  outline: none;
 }
-.card-content {
-  padding: 0 1em;
+
+.rotating {
+  display: inline-block;
+  animation: rotate-me 7s linear infinite;
+}
+
+@keyframes rotate-me {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
