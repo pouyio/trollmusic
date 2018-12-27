@@ -26,6 +26,9 @@ const videos = {
         } else {
             this.current = null;
         }
+    },
+    remove(video) {
+        this.list = this.list.filter(v => v.video !== video);
     }
 }
 

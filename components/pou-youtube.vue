@@ -15,7 +15,7 @@
       </div>
 
       <pou-bordered :icon="'🎥'" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
-        <div class="flex items-baseline mb-2 md:flex-row flex-col">
+        <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
           <h2>{{ title }}</h2>
           <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
         </div>
@@ -36,30 +36,6 @@
         </div>
       </pou-bordered>
 
-      <!-- <div class="relative pt-4 m-4 md:mr-0 mt-2">
-        <div class="border rounded pt-4 p-2">
-          <h2 class="absolute pin-t bg-white rounded-full px-2">🎥</h2>
-          <div class="flex items-baseline mb-2 md:flex-row flex-col">
-            <h2>{{ title }}</h2>
-            <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
-          </div>
-          <div class="flex items-center">
-            <input
-              class="slider flex-grow"
-              step="1"
-              min="0"
-              :max="secondsMax"
-              type="range"
-              v-model="secondsInternal"
-              @change="changeSeconds"
-            >
-            <span class="ml-2">
-              <span :class="{'rotating': state}">⏳</span>
-              {{timeMax}} / {{time}}
-            </span>
-          </div>
-        </div>
-      </div>-->
     </section>
     <section v-else>
       <figure>

@@ -60,6 +60,11 @@ io.on('connection', (socket) => {
         io.emit('queue', user, videos.list);
     });
 
+    socket.on('remove', (user, videoId) => {
+        videos.remove(videoId);
+        io.emit('queue', user, videos.list);
+    });
+
     socket.on('message', ({ user, message }) => {
         io.emit('message', { user, message });
     })
