@@ -1,6 +1,6 @@
 <template>
   <ul
-    class="mt-4 flex rounded p-0 bg-orange absolute flex-wrap shadow-lg overflow-y-auto justify-around"
+    class="flex rounded p-0 bg-orange absolute flex-wrap shadow-lg overflow-y-auto justify-around"
     style="-webkit-overflow-scrolling: touch;"
   >
     <pou-result
