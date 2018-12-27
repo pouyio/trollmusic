@@ -55,11 +55,6 @@ io.on('connection', (socket) => {
         io.emit('queue', user, videos.list);
     });
 
-    socket.on('reset', (user) => {
-        videos.reset();
-        io.emit('queue', user, videos.list);
-    });
-
     socket.on('remove', (user, videoId) => {
         videos.remove(videoId);
         io.emit('queue', user, videos.list);

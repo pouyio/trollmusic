@@ -50,13 +50,11 @@ export default {
   },
   methods: {
     remove(videoId) {
-      console.log(videoId);
       this.$socket.emit("remove", this.user, videoId);
     }
   },
   sockets: {
     queue([user, list]) {
-      console.log(list);
       this.list = list;
     }
   }
