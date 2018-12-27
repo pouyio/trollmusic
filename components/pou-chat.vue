@@ -29,7 +29,7 @@
           class="absolute pin-t pin-r p-2 cursor-pointer emoji-invoker outline-none"
           slot="emoji-invoker"
           slot-scope="{ events: { click: clickEvent } }"
-          @click="clickEvent"
+          @click="active && clickEvent()"
         >
           <button class="focus:outline-none h-6 w-6 rounded-full">😀</button>
         </div>

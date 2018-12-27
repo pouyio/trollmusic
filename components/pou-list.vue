@@ -3,10 +3,9 @@
     <pou-bordered :icon="'🔜'" :active="list.length" class="p-4">
       <div class="flex flex-wrap justify-around" v-if="list.length">
         <div
-          v-for="(video, index) in list"
+          v-for="video in list"
           :key="video.video"
           class="w-32 md:w-48 md:m-2 m-1 border rounded md:flex-initial flex-grow relative"
-          :style="{opacity: 1 / (index + 1) }"
         >
           <div class="overflow-hidden">
             <button
