@@ -10,10 +10,10 @@
     </div>
     <div class="border-t border-orange">
       <div class="inline-block border-r border-orange py-2 w-1/2 text-center">
-        <button class="font-light" @click="addVideo">Play now ▶️</button>
+        <button class="font-light focus:outline-none" @click="addVideo">Play now ▶️</button>
       </div>
       <div class="inline-block py-2 text-center">
-        <button class="font-light" @click="queueVideo">Add to list ➕</button>
+        <button class="font-light focus:outline-none" @click="queueVideo">Add to list ➕</button>
       </div>
     </div>
   </div>
