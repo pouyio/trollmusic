@@ -6,6 +6,7 @@
         class="transition outline-none border border-transparent bg-orange-lighter focus:border-orange-light rounded focus:bg-white focus:shadow-md py-2 pr-4 pl-4 md:pl-10 block w-full appearance-none leading-normal"
         type="text"
         placeholder="🔍 Search video..."
+        @keydown.esc="reset"
       >
     </div>
     <pou-results v-if="results.length" :videos="results" :user="user" @add="add" @queue="queue"></pou-results>
@@ -36,7 +37,7 @@ export default {
         return;
       }
       const results = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=15`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=25`
       );
       this.appendVideos((await results.json()).items || []);
     }, 500)
@@ -50,11 +51,17 @@ export default {
     },
     add(video, title, user) {
       this.results = [];
+      this.searchText = "";
       this.$socket.emit("add", { video, title, user });
     },
     queue(video, title, user) {
       this.results = [];
+      this.searchText = "";
       this.$socket.emit("queue", { video, title, user });
+    },
+    reset() {
+      this.searchText = "";
+      this.results = [];
     }
   }
 };

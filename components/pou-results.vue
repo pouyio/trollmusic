@@ -1,5 +1,8 @@
 <template>
-  <ul class="flex">
+  <ul
+    class="mt-4 flex rounded p-0 bg-orange absolute flex-wrap shadow-lg overflow-y-auto justify-around"
+    style="-webkit-overflow-scrolling: touch;"
+  >
     <pou-result
       v-for="video in videos"
       :key="video.id.videoId"
@@ -35,15 +38,9 @@ export default {
 <style scoped>
 ul {
   --nav-height: 2.7em;
-  position: absolute;
   top: var(--nav-height);
   width: 84vw;
   left: 6vw;
   max-height: calc(100vh - var(--nav-height));
-  overflow-y: auto;
-  flex-wrap: wrap;
-  background-color: var(--custom-color);
-  justify-content: space-evenly;
-  align-items: flex-end;
 }
 </style>
