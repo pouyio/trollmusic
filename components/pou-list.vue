@@ -1,7 +1,7 @@
 <template>
   <div class="pt-2">
     <pou-bordered :icon="'🔜'" :active="list.length" class="p-4">
-      <div class="flex flex-wrap justify-around md:justify-start" v-if="list.length">
+      <div class="flex flex-wrap justify-around" v-if="list.length">
         <div
           v-for="(video, index) in list"
           :key="video.video"
