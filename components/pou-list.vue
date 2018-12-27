@@ -11,7 +11,7 @@
           <div class="overflow-hidden">
             <button
               @click="remove(video.video)"
-              class="block absolute bg-red-lighter pin-r rounded-full p-1 z-50 w-5 focus:outline-none"
+              class="block absolute bg-red-lighter pin-r rounded-full p-1 w-5 focus:outline-none"
               style="top: -.5em; right: -.5em"
             >
               <span class="text-xs block">🗑️</span>
