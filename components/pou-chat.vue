@@ -97,7 +97,7 @@ export default {
   sockets: {
     message({ user, message }) {
       this.messages.push([user, message]);
-      if (this.user === user) {
+      if (this.user !== user) {
         this.$notification.show(user, {
           body: message,
           icon: 'https://f4.bcbits.com/img/0010573837_20.jpg'
