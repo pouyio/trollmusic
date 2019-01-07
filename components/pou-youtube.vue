@@ -31,7 +31,7 @@
           >
           <span class="ml-2">
             <span :class="{'rotating': state}">⏳</span>
-            {{timeMax}} / {{time}}
+            {{time}} / {{timeMax}}
           </span>
         </div>
       </pou-bordered>
