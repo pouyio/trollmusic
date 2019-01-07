@@ -39,7 +39,6 @@ export default {
 ul {
   --nav-height: 3.6em;
   top: var(--nav-height);
-  width: 84vw;
   left: 6vw;
   max-height: calc(100vh - var(--nav-height));
 }
