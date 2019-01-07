@@ -83,6 +83,9 @@ export default {
   },
   methods: {
     submit() {
+      if (!this.message) {
+        return;
+      }
       this.$socket.emit("message", { user: this.user, message: this.message });
       this.message = "";
     },
