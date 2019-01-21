@@ -55,8 +55,6 @@ export default {
       this.$socket.emit("add", { video, title, user });
     },
     queue(video, title, user) {
-      this.results = [];
-      this.searchText = "";
       this.$socket.emit("queue", { video, title, user });
     },
     reset() {
