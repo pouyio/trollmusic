@@ -45,6 +45,11 @@ io.on('connection', (socket) => {
         io.emit('playing', { video, title, user, seconds: 0 });
     });
 
+    socket.on('reorder', (videosArr, user) => {
+        videos.list = videosArr;
+        socket.broadcast.emit('reorder', videos.list);
+    });
+
     socket.on('queue', ({ video, title, user }) => {
         if (!videos.current) {
             videos.current = { video, title, user };
