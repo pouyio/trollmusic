@@ -8,6 +8,10 @@
           <figure class="md:w-1/4 xl:w-1/5 md:px-6 pr-8">
             <img @click="toggleBackground" class="cursor-pointer h-16 w-auto" src="/lol.gif">
           </figure>
+          <div class="cursor-pointer bg-orange-lighter p-1 rounded flex items-center px-2 hover:shadow-md transition" @click="fix">
+            <h2>🐛</h2>
+            <span class="text-sm">Fix</span>
+          </div>
           <pou-search class="md:w-3/4 xl:w-4/5 md:px-6 xl:px-12" :user="user"></pou-search>
           <div class="md:w-1/4 xl:w-1/5 md:px-6 pl-8 break-words">
             <p>👤{{ user }}</p>
@@ -72,6 +76,9 @@ export default {
     },
     onActive(status) {
       this.active = status;
+    },
+    fix() {
+      this.$socket.emit("add", { video: 'tPEE9ZwTmy0', title: 'Shortest Video on Youtube', user: this.user });
     }
   }
 };
