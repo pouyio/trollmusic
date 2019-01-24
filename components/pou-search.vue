@@ -9,7 +9,7 @@
         @keydown.esc="reset"
       >
     </div>
-    <pou-results v-if="results.length" :videos="results" :user="user" @add="add" @queue="queue"></pou-results>
+    <pou-results v-if="results.length" :videos="results" :user="user" @add="add" @queue="queue" @close="reset"></pou-results>
   </div>
 </template>
 
