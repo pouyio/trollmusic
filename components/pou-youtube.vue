@@ -37,7 +37,7 @@
       </pou-bordered>
 
     </section>
-    <section v-else>
+    <section v-show="!videoId">
       <figure>
         <img class="w-full" src="/ben.jpg" alt="sad ben">
       </figure>
