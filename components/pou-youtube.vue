@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <section v-if="videoId">
+    <section v-show="videoId">
       <div class="relative">
         <youtube
           ref="youtube"
