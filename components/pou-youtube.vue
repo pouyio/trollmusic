@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <section v-show="videoId">
+    <section v-if="videoId">
       <div class="relative">
         <youtube
           ref="youtube"
@@ -37,7 +37,7 @@
       </pou-bordered>
 
     </section>
-    <section v-show="!videoId">
+    <section v-else>
       <figure>
         <img class="w-full" src="/ben.jpg" alt="sad ben">
       </figure>
