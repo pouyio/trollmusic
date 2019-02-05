@@ -16,9 +16,6 @@ const videos = {
             this.list.push({ video,title, user })
         }
     },
-    reset() {
-        this.list = [];
-    },
     removeAndNext(video) {
         this.list = this.list.filter(v => v.video !== video);
         if (this.list.length) {
