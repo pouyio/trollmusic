@@ -1,7 +1,7 @@
 <template>
   <pou-bordered :icon="'💬'" :active="active">
     <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
-    <div class="overflow-hidden h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
+    <div class="overflow-auto h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
         <div
           v-for="(message, index) in messages"
