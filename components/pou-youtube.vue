@@ -60,6 +60,9 @@ export default {
   components: {
     pouBordered
   },
+  created() {
+    this.$socket.emit("initial-playing");
+  },
   data() {
     return {
       playerVars: {

@@ -17,19 +17,24 @@ let ended = 0;
 
 io.on('connection', (socket) => {
 
-    if (videos.current) {
-        socket.emit('playing', videos.current);
-    }
-
-    if (videos.list.length) {
-        socket.emit('queue', '', videos.list);
-    }
 
     socket.emit('users', getUsers());
 
     socket.on('set-user', (user) => {
         socket.data = { user };
         io.emit('users', getUsers());
+    });
+
+    socket.on('initial-playing', () => {
+        if (videos.current) {
+            socket.emit('playing', videos.current);
+        }
+    });
+
+    socket.on('initial-queue', () => {
+        if (videos.list.length) {
+            socket.emit('queue', '', videos.list);
+        }
     });
 
     socket.on('paused', (user) => {
