@@ -105,13 +105,6 @@ export default {
       }
     }
   },
-  watch: {
-    active(value) {
-      if (!value) {
-        this.messages = [];
-      }
-    }
-  },
   directives: {
     focus: {
       inserted(el) {
