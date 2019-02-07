@@ -62,8 +62,8 @@ export default {
     };
   },
   created() {
-    // this.user = prompt("Write your username");
-    this.user = "pollo" + (new Date().getTime() % 100000);
+    this.user = prompt("Write your username");
+    // this.user = "pollo" + (new Date().getTime() % 100000);
     this.$socket.emit("set-user", this.user);
   },
   methods: {
