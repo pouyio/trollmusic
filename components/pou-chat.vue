@@ -17,7 +17,7 @@
     <div class="border-t -mx-2 px-2 pt-2 relative">
       <textarea
         :disabled="!active"
-        class="resize-y w-full outline-none"
+        class="resize-y w-full outline-none pr-6"
         :class="{'bg-grey-lighter': !active}"
         type="text"
         :placeholder="active ? 'Send a message...' : 'Play something to send a message'"
