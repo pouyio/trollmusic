@@ -16,6 +16,7 @@
 <script>
 import pouResults from "./pou-results";
 import debounce from "../utils/debounce";
+import { channel } from '../ably/ably';
 const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
 export default {
@@ -52,10 +53,10 @@ export default {
     add(video, title, user) {
       this.results = [];
       this.searchText = "";
-      this.$socket.emit("add", { video, title, user });
+      channel.publish("playing", { video, title, user });
     },
     queue(video, title, user) {
-      this.$socket.emit("queue", { video, title, user });
+      channel.publish("queue", { video, title, user });
     },
     reset() {
       this.searchText = "";

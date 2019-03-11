@@ -44,6 +44,7 @@
 <script>
 import pouBordered from "./pou-bordered";
 import draggable from "vuedraggable";
+import { channel } from "../ably/ably";
 export default {
   name: "pou-list",
   components: {
@@ -51,28 +52,52 @@ export default {
     draggable
   },
   props: ["user"],
-  created() {
-    this.$socket.emit("initial-queue");
-  },
   data() {
     return {
-      list: []
+      list: [],
+      firstLoad: true
     };
+  },
+  created() {
+    // this.$socket.emit("initial-queue");
+    channel.subscribe("queue", ({ data }) => {
+      if (!this.list.some(d => d.video === data.video)) {
+        this.list.push(data);
+      }
+    });
+
+    channel.subscribe("remove", ({ data }) => {
+      this.list = this.list.filter(item => item.video !== data);
+    });
+
+    channel.subscribe("reorder", ({ data }) => {
+      this.list = data;
+    });
+
+    channel.subscribe("request-info", () => {
+      if (this.list.length) {
+        channel.publish("info-list", this.list);
+      }
+    });
+
+    channel.subscribe("info-list", ({ data }) => {
+      if (this.firstLoad) {
+        this.list = data;
+        this.firstLoad = false;
+      }
+    });
+
+    channel.subscribe("ended", ({ data }) => {
+      this.list = this.list.filter(v => v.video !== data);
+      this.$emit('next', this.list.shift());
+    });
   },
   methods: {
     remove(videoId) {
-      this.$socket.emit("remove", this.user, videoId);
+      channel.publish("remove", videoId);
     },
     checkMove() {
-      this.$socket.emit("reorder", this.list, this.user);
-    }
-  },
-  sockets: {
-    queue([user, list]) {
-      this.list = list;
-    },
-    reorder(videos) {
-      this.list = videos;
+      channel.publish("reorder", this.list);
     }
   }
 };

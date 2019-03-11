@@ -8,7 +8,10 @@
           <figure class="md:w-1/4 xl:w-1/5 md:px-6 pr-8">
             <img @click="toggleBackground" class="cursor-pointer h-16 w-auto" src="/lol.gif">
           </figure>
-          <div class="cursor-pointer bg-orange-lighter p-1 rounded flex items-center px-2 hover:shadow-md transition" @click="fix">
+          <div
+            class="cursor-pointer bg-orange-lighter p-1 rounded flex items-center px-2 hover:shadow-md transition"
+            @click="fix"
+          >
             <h2>🐛</h2>
             <span class="text-sm">Fix</span>
           </div>
@@ -24,15 +27,15 @@
         class="flex flex-wrap md:flex-no-wrap rounded-lg bg-white overflow-hidden shadow mx-2 xl:mx-0"
       >
         <div class="w-full md:w-2/3">
-          <pou-youtube @active="onActive"></pou-youtube>
+          <pou-youtube :next-video="nextVideo" @active="onActive"></pou-youtube>
         </div>
         <div class="flex flex-col px-4 pb-4 md:pt-2 w-full md:w-1/3 justify-between">
           <pou-users class="py-2 flex-1" :user="user"></pou-users>
-          <pou-chat class="pt-2" :user="user" :active="active"></pou-chat>
+          <pou-chat class="pt-2" :user="user"></pou-chat>
         </div>
       </section>
       <section class="rounded-lg bg-white shadow mx-2 my-4 xl:mx-0">
-        <pou-list :user="user"></pou-list>
+        <pou-list :user="user" @next="onNext"></pou-list>
       </section>
     </main>
   </div>
@@ -44,6 +47,7 @@ import pouYoutube from "./components/pou-youtube.vue";
 import pouList from "./components/pou-list.vue";
 import pouChat from "./components/pou-chat.vue";
 import pouUsers from "./components/pou-users.vue";
+import { channel, user } from "./ably/ably.js";
 
 export default {
   name: "App",
@@ -58,13 +62,13 @@ export default {
     return {
       active: false,
       user: "",
-      backgroundImage: "bg-1"
+      backgroundImage: "bg-1",
+      nextVideo: null
     };
   },
   created() {
-    this.user = prompt("Write your username");
-    // this.user = "pollo" + (new Date().getTime() % 100000);
-    this.$socket.emit("set-user", this.user);
+    this.user = user;
+    channel.publish("request-info", "");
   },
   methods: {
     toggleBackground() {
@@ -78,7 +82,14 @@ export default {
       this.active = status;
     },
     fix() {
-      this.$socket.emit("add", { video: 'tPEE9ZwTmy0', title: 'Shortest Video on Youtube', user: this.user });
+      channel.publish("playing", {
+        video: "tPEE9ZwTmy0",
+        title: "Shortest Video on Youtube",
+        user: this.user
+      });
+    },
+    onNext(video) {
+      this.nextVideo = video;
     }
   }
 };

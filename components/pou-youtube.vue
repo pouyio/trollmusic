@@ -35,7 +35,6 @@
           </span>
         </div>
       </pou-bordered>
-
     </section>
     <section v-else>
       <figure>
@@ -55,23 +54,23 @@
 <script>
 import format from "format-duration";
 import pouBordered from "./pou-bordered";
+import { channel } from "../ably/ably.js";
+
 export default {
   name: "pou-youtube",
+  props: ["nextVideo"],
   components: {
     pouBordered
-  },
-  created() {
-    this.$socket.emit("initial-playing");
   },
   data() {
     return {
       playerVars: {
+        rel: 0,
         controls: 0,
         autoplay: 1,
         disablekb: 1,
         modestbranding: 1,
         showinfo: 0,
-        rel: 0,
         playsinline: 1
       },
       player: null,
@@ -81,31 +80,81 @@ export default {
       title: "",
       videoId: "",
       user: "",
-      state: false
+      state: false,
+      firstLoad: true
     };
   },
-  sockets: {
-    paused(user) {
-      this.pauseVideo();
-      this.state = false;
-    },
-    playing({ video, title, user, seconds }) {
+  watch: {
+    nextVideo({ video, title, user }) {
       this.state = true;
       this.videoId = video;
-      this.seconds = seconds;
       this.title = title;
-      this.user = user;
       this.$emit("active", true);
-      // TODO refactor to avoid checking if player is available
-      if (this.player) {
-        this.player.seekTo(this.seconds, true);
-        this.playVideo();
-      }
-      setTimeout(async () => {
-        // TODO not working properly
-        this.secondsMax = await this.player.getDuration();
-      }, 700);
     }
+  },
+  created() {
+    // this.$socket.emit("initial-playing");
+    channel.subscribe(
+      "playing",
+      ({ data: { video, title, user, seconds } }) => {
+        this.state = true;
+        this.videoId = video;
+        this.seconds = seconds;
+        this.title = title;
+        this.user = user;
+        this.$emit("active", true);
+        // TODO refactor to avoid checking if player is available
+        if (this.player) {
+          this.player.seekTo(this.seconds, true);
+          this.playVideo();
+        }
+        setTimeout(async () => {
+          // TODO not working properly
+          this.secondsMax = await this.player.getDuration();
+        }, 700);
+      }
+    );
+
+    channel.subscribe("paused", user => {
+      this.pauseVideo();
+      this.state = false;
+    });
+
+    channel.subscribe("request-info", async () => {
+      if (this.videoId) {
+        channel.publish("info-playing", {
+          video: this.videoId,
+          user: this.user,
+          title: this.title,
+          seconds: await this.player.getCurrentTime()
+        });
+      }
+    });
+
+    channel.subscribe(
+      "info-playing",
+      ({ data: { video, title, user, seconds } }) => {
+        if (this.firstLoad) {
+          this.state = true;
+          this.videoId = video;
+          this.seconds = seconds;
+          this.title = title;
+          this.user = user;
+          this.$emit("active", true);
+          // TODO refactor to avoid checking if player is available
+          if (this.player && this.state) {
+            this.player.seekTo(this.seconds, true);
+            this.playVideo();
+          }
+          setTimeout(async () => {
+            // TODO not working properly
+            this.secondsMax = await this.player.getDuration();
+          }, 700);
+
+          this.firstLoad = false;
+        }
+      }
+    );
   },
   methods: {
     playVideo() {
@@ -128,7 +177,8 @@ export default {
     },
     onEnded() {
       clearInterval(this.interval);
-      this.$socket.emit("ended", this.videoId, this.user);
+      // this.$socket.emit("ended", this.videoId, this.user);
+      channel.publish("ended", this.videoId);
       this.videoId = null;
       this.$emit("active", false);
     },
@@ -139,11 +189,11 @@ export default {
       const state = await this.player.getPlayerState();
       if (state === 1) {
         this.pauseVideo();
-        this.$socket.emit("paused", this.user);
+        channel.publish("paused", this.user);
         this.state = false;
       } else {
         this.playVideo();
-        this.$socket.emit("playing", {
+        channel.publish("playing", {
           video: this.videoId,
           user: this.user,
           title: this.title,
@@ -155,13 +205,14 @@ export default {
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
       if (this.state) {
-        this.$socket.emit("playing", {
+        channel.publish("playing", {
           video: this.videoId,
           user: this.user,
+          title: this.title,
           seconds: this.secondsInternal
         });
       } else {
-        this.$socket.emit("paused", this.user);
+        channel.publish("paused", this.user);
       }
     }
   },
