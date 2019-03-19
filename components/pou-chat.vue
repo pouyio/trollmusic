@@ -1,5 +1,5 @@
 <template>
-  <pou-bordered :icon="'💬'" :active="active">
+  <pou-bordered :icon="'💬'" active="true">
     <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
     <div class="overflow-auto h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
@@ -16,11 +16,9 @@
     </div>
     <div class="border-t -mx-2 px-2 pt-2 relative">
       <textarea
-        :disabled="!active"
         class="resize-y w-full outline-none pr-6"
-        :class="{'bg-grey-lighter': !active}"
         type="text"
-        :placeholder="active ? 'Send a message...' : 'Play something to send a message'"
+        placeholder="Send a message..."
         v-model="message"
         @keyup.enter="submit"
       ></textarea>
@@ -29,7 +27,7 @@
           class="absolute pin-t pin-r p-2 cursor-pointer emoji-invoker outline-none"
           slot="emoji-invoker"
           slot-scope="{ events: { click: clickEvent } }"
-          @click="active && clickEvent()"
+          @click="clickEvent()"
         >
           <button class="focus:outline-none h-6 w-6 rounded-full">😀</button>
         </div>
@@ -69,7 +67,7 @@ import pouBordered from "./pou-bordered";
 import EmojiPicker from "vue-emoji-picker";
 export default {
   name: "pou-chat",
-  props: ["user", "active"],
+  props: ["user"],
   components: {
     pouBordered,
     EmojiPicker

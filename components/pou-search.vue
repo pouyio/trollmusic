@@ -9,13 +9,21 @@
         @keydown.esc="reset"
       >
     </div>
-    <pou-results v-if="results.length" :videos="results" :user="user" @add="add" @queue="queue" @close="reset"></pou-results>
+    <pou-results
+      v-if="results.length"
+      :videos="results"
+      :user="user"
+      @add="add"
+      @queue="queue"
+      @close="reset"
+    ></pou-results>
   </div>
 </template>
 
 <script>
 import pouResults from "./pou-results";
 import debounce from "../utils/debounce";
+import { db } from "../firebase.js";
 const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
 export default {
@@ -45,6 +53,12 @@ export default {
   created() {
     this.debounceSearchVideo = debounce(this.searchVideo, 500);
   },
+  firestore() {
+    return {
+      videos: db.collection("videos"),
+      video: db.collection("video").doc("current"),
+    };
+  },
   methods: {
     appendVideos(videos) {
       this.results = videos;
@@ -52,10 +66,14 @@ export default {
     add(video, title, user) {
       this.results = [];
       this.searchText = "";
-      this.$socket.emit("add", { video, title, user });
+      this.$firestore.video.set({ video, title, user, playing: true });
     },
     queue(video, title, user) {
-      this.$socket.emit("queue", { video, title, user });
+      if (this.video.video) {
+        this.$firestore.videos.add({ video, title, user });
+      } else {
+        this.$firestore.video.set({ video, title, user, playing: true });
+      }
     },
     reset() {
       this.searchText = "";

@@ -1,22 +1,22 @@
 <template>
   <div class="pt-2">
-    <pou-bordered :icon="'🔜'" :active="list.length" class="p-4">
+    <pou-bordered :icon="'🔜'" :active="videos.length" class="p-4">
       <draggable
         class="flex flex-wrap justify-around"
-        v-if="list.length"
-        v-model="list"
+        v-if="videos.length"
+        v-model="videos"
         @start="drag=true"
         @end="drag=false"
         @change="checkMove"
       >
         <div
-          v-for="video in list"
+          v-for="video in videos"
           :key="video.video"
           class="w-32 md:w-48 md:m-2 m-1 border rounded md:flex-initial flex-grow relative cursor-move"
         >
           <div class="overflow-hidden">
             <button
-              @click="remove(video.video)"
+              @click="remove(video)"
               class="block absolute bg-red-lighter pin-r rounded-full p-1 w-5 focus:outline-none"
               style="top: -.5em; right: -.5em"
             >
@@ -44,6 +44,8 @@
 <script>
 import pouBordered from "./pou-bordered";
 import draggable from "vuedraggable";
+import { db } from "../firebase.js";
+
 export default {
   name: "pou-list",
   components: {
@@ -52,28 +54,34 @@ export default {
   },
   props: ["user"],
   created() {
-    this.$socket.emit("initial-queue");
+    // this.$socket.emit("initial-queue");
   },
   data() {
     return {
       list: []
     };
   },
+  firestore() {
+    return {
+      videos: db.collection("videos")
+    };
+  },
   methods: {
-    remove(videoId) {
-      this.$socket.emit("remove", this.user, videoId);
+    remove(video) {
+      this.$firestore.videos.doc(video[".key"]).delete();
+      // this.$socket.emit("remove", this.user, videoId);
     },
     checkMove() {
-      this.$socket.emit("reorder", this.list, this.user);
-    }
-  },
-  sockets: {
-    queue([user, list]) {
-      this.list = list;
-    },
-    reorder(videos) {
-      this.list = videos;
+      // this.$socket.emit("reorder", this.list, this.user);
     }
   }
+  // sockets: {
+  //   queue([user, list]) {
+  //     this.list = list;
+  //   },
+  //   reorder(videos) {
+  //     this.list = videos;
+  //   }
+  // }
 };
 </script>

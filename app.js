@@ -7,11 +7,45 @@ const io = require('socket.io').listen(server);
 const PORT = 8080;
 const cors = require('cors');
 const videos = require('./videos');
+const admin = require('firebase-admin');
+
+var serviceAccount = require('./keys.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('dist'));
+
+app.get('/ended', async (req, res) => {
+    res.end();
+    const id = req.query.id;
+    const videoPastSnapshot = await db.collection('video').doc('past').get();
+    const videoPast = videoPastSnapshot.data();
+
+    if ((videoPast || {}).video === id) {
+        // no hacer nada, incoherencia
+        return;
+    }
+
+    db.collection('video').doc('past').set({ video: id });
+
+    const videosSnapshot = await db.collection('videos').get();
+    const videos = [];
+    videosSnapshot.forEach(doc => videos.push({ ...doc.data(), key: doc.id }));
+    const nextVideo = videos.shift();
+    if (!nextVideo) {
+        db.collection('video').doc('current').set({});
+    } else {
+        db.collection('videos').doc(nextVideo.key).delete();
+        db.collection('video').doc('current').set({ ...nextVideo, playing: true });
+    }
+});
 
 let ended = 0;
 

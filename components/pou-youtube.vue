@@ -1,12 +1,12 @@
 <template>
   <div class="w-full">
-    <section v-if="videoId">
+    <section v-if="video.video">
       <div class="relative">
         <youtube
           ref="youtube"
           player-width="100%"
-          :key="videoId"
-          :video-id="videoId"
+          :key="video.video"
+          :video-id="video.video"
           :player-vars="playerVars"
           @ready="onReady"
           @ended="onEnded"
@@ -14,10 +14,10 @@
         <button class="w-full absolute pin opacity-0 play-cursor" @click="togglePlay"></button>
       </div>
 
-      <pou-bordered :icon="'🎥'" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
+      <pou-bordered icon="🎥" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
         <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
-          <h2>{{ title }}</h2>
-          <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ user }}</p>
+          <h2>{{ video.title }}</h2>
+          <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ video.user }}</p>
         </div>
         <div class="flex items-center">
           <input
@@ -30,12 +30,11 @@
             @change="changeSeconds"
           >
           <span class="ml-2">
-            <span :class="{'rotating': state}">⏳</span>
+            <span :class="{'rotating': video.playing}">⏳</span>
             {{time}} / {{timeMax}}
           </span>
         </div>
       </pou-bordered>
-
     </section>
     <section v-else>
       <figure>
@@ -55,13 +54,12 @@
 <script>
 import format from "format-duration";
 import pouBordered from "./pou-bordered";
+import { db } from "../firebase.js";
+
 export default {
   name: "pou-youtube",
   components: {
     pouBordered
-  },
-  created() {
-    this.$socket.emit("initial-playing");
   },
   data() {
     return {
@@ -77,38 +75,33 @@ export default {
       player: null,
       interval: null,
       secondsInternal: 0,
-      secondsMax: 0,
-      title: "",
-      videoId: "",
-      user: "",
-      state: false
+      secondsMax: 0
     };
   },
-  sockets: {
-    paused(user) {
-      this.pauseVideo();
-      this.state = false;
-    },
-    playing({ video, title, user, seconds }) {
-      this.state = true;
-      this.videoId = video;
-      this.seconds = seconds;
-      this.title = title;
-      this.user = user;
-      this.$emit("active", true);
-      // TODO refactor to avoid checking if player is available
-      if (this.player) {
-        this.player.seekTo(this.seconds, true);
-        this.playVideo();
-      }
-      setTimeout(async () => {
-        // TODO not working properly
-        this.secondsMax = await this.player.getDuration();
-      }, 700);
-    }
+  firestore() {
+    return {
+      videos: db.collection("videos"),
+      video: db.collection("video").doc("current")
+    };
+  },
+  created() {
+    db.collection("video")
+      .doc("current")
+      .onSnapshot(doc => {
+        const { playing } = doc.data();
+        if (!this.player) {
+          return;
+        }
+        if (playing) {
+          this.playVideo();
+        } else {
+          this.pauseVideo();
+        }
+      });
   },
   methods: {
-    playVideo() {
+    async playVideo() {
+      this.player.seekTo(this.video.seconds, true);
       clearInterval(this.interval);
       this.interval = setInterval(this.updateProgress, 1000);
       this.player.playVideo();
@@ -117,52 +110,36 @@ export default {
       clearInterval(this.interval);
       this.player.pauseVideo();
     },
-    async onReady(event) {
+    onReady(event) {
       this.player = event.target;
-      if (this.state) {
+      if (this.video.playing) {
         this.playVideo();
       } else {
         this.pauseVideo();
       }
-      this.secondsMax = await this.player.getDuration();
+      this.secondsMax = this.player.getDuration();
     },
     onEnded() {
       clearInterval(this.interval);
-      this.$socket.emit("ended", this.videoId, this.user);
-      this.videoId = null;
-      this.$emit("active", false);
+      fetch(`./ended?id=${this.video.video}`);
     },
-    async updateProgress() {
-      this.secondsInternal = await this.player.getCurrentTime();
+    updateProgress() {
+      this.secondsInternal = this.player.getCurrentTime();
     },
-    async togglePlay() {
-      const state = await this.player.getPlayerState();
+    togglePlay() {
+      const state = this.player.getPlayerState();
+      const seconds = this.player.getCurrentTime();
       if (state === 1) {
+        this.$firestore.video.update({ playing: false, seconds });
         this.pauseVideo();
-        this.$socket.emit("paused", this.user);
-        this.state = false;
       } else {
+        this.$firestore.video.update({ playing: true });
         this.playVideo();
-        this.$socket.emit("playing", {
-          video: this.videoId,
-          user: this.user,
-          title: this.title,
-          seconds: await this.player.getCurrentTime()
-        });
-        this.state = true;
       }
     },
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
-      if (this.state) {
-        this.$socket.emit("playing", {
-          video: this.videoId,
-          user: this.user,
-          seconds: this.secondsInternal
-        });
-      } else {
-        this.$socket.emit("paused", this.user);
-      }
+      this.$firestore.video.update({ seconds: +this.secondsInternal });
     }
   },
   computed: {
