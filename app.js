@@ -7,11 +7,13 @@ const PORT = 8080;
 const cors = require('cors');
 const admin = require('firebase-admin');
 
+const atob = require('atob');
+
 admin.initializeApp({
     credential: admin.credential.cert({
         projectId: process.env.projectid,
         clientEmail: process.env.client_email,
-        privateKey: Buffer.from(process.env.private_key, 'base64')
+        privateKey: atob(process.env.private_key)
         // privateKey: process.env.private_key
     })
 });
