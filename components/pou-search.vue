@@ -24,7 +24,6 @@
 import pouResults from "./pou-results";
 import debounce from "../utils/debounce";
 import { db } from "../firebase.js";
-const KEY = "AIzaSyARVqBg6cgDq3wsYVBqG172SMs3vZ9Yqh0";
 
 export default {
   name: "pou-search",
@@ -45,7 +44,7 @@ export default {
         return;
       }
       const results = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${KEY}&q=${text}&maxResults=25`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${process.env.KEY}&q=${text}&maxResults=25`
       );
       this.appendVideos((await results.json()).items || []);
     }, 500)
@@ -55,8 +54,8 @@ export default {
   },
   firestore() {
     return {
-      videos: db.collection("videos"),
-      video: db.collection("video").doc("current"),
+      videos: db.collection("videos").orderBy("order"),
+      video: db.collection("video").doc("current")
     };
   },
   methods: {
@@ -70,9 +69,12 @@ export default {
     },
     queue(video, title, user) {
       if (this.video.video) {
-        this.$firestore.videos.add({ video, title, user });
+        const { order = 0 } = this.videos[this.videos.length - 1] || {};
+        db.collection("videos").add({ video, title, user, order: order + 1 });
       } else {
-        this.$firestore.video.set({ video, title, user, playing: true });
+        db.collection("video")
+          .doc("current")
+          .set({ video, title, user, playing: true });
       }
     },
     reset() {

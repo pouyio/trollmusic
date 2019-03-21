@@ -16,7 +16,7 @@
 
       <pou-bordered icon="🎥" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
         <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
-          <h2>{{ video.title }}</h2>
+          <h2 v-html="video.title"></h2>
           <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ video.user }}</p>
         </div>
         <div class="flex items-center">
@@ -42,7 +42,7 @@
       </figure>
 
       <!-- TODO fix: flex not recalculating height  -->
-      <pou-bordered :icon="'🎥'" :active="false" class="pt-4 m-4 md:mr-0 mt-2">
+      <pou-bordered icon="🎥" :active="false" class="pt-4 m-4 md:mr-0 mt-2">
         <div class="flex items-baseline mb-2 md:flex-row flex-col">
           <h2 class="mx-auto">NO VIDEO YET...try searching 🔎👆🏼</h2>
         </div>

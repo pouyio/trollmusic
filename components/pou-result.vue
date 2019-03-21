@@ -6,13 +6,13 @@
       <img class="w-full" :src="img" alt="video image">
     </figure>
     <div class="p-2 flex-grow">
-      <p class>{{ title }}</p>
+      <p v-html="title"></p>
     </div>
-    <div class="border-t border-orange">
+    <div class="border-t border-orange flex">
       <div class="inline-block border-r border-orange py-2 w-1/2 text-center">
         <button class="font-light focus:outline-none" @click="addVideo">Play now ▶️</button>
       </div>
-      <div class="inline-block py-2 text-center">
+      <div class="inline-block py-2 w-1/2 text-center">
         <button class="font-light focus:outline-none" @click="queueVideo">Add to list ➕</button>
       </div>
     </div>

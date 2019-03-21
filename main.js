@@ -1,5 +1,4 @@
 import Vue from 'vue/dist/vue.js';
-import VueSocketIO from 'vue-socket.io';
 import VueYouTubeEmbed from 'vue-youtube-embed';
 import VueChatScroll from 'vue-chat-scroll';
 import VueNativeNotification from 'vue-native-notification';
@@ -8,7 +7,6 @@ import './style.css'
 
 import App from './App.vue';
 
-Vue.use(new VueSocketIO({ connection: window.location.href }));
 Vue.use(VueFirestore);
 Vue.use(VueYouTubeEmbed);
 Vue.use(VueNativeNotification, { requestOnNotify: true });

@@ -2,5 +2,10 @@
     "version": 1,
     "alias": [
         "trollmusic.vicenteortiz.me"
-    ]
+    ],
+    "env": {
+        "projectid": "@projectid",
+        "private_key": "@private_key",
+        "client_email": "@client_email"
+    }
 }

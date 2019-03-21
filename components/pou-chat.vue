@@ -1,5 +1,5 @@
 <template>
-  <pou-bordered :icon="'💬'" active="true">
+  <pou-bordered icon="💬" active="true">
     <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
     <div class="overflow-auto h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
@@ -65,6 +65,8 @@
 <script>
 import pouBordered from "./pou-bordered";
 import EmojiPicker from "vue-emoji-picker";
+import { channel } from "../ably/ably.js";
+
 export default {
   name: "pou-chat",
   props: ["user"],
@@ -85,23 +87,27 @@ export default {
       if (!this.message) {
         return;
       }
-      this.$socket.emit("message", { user: this.user, message: this.message });
+      channel.publish("message", { user: this.user, message: this.message });
       this.message = "";
     },
     append(emoji) {
       this.message += emoji;
     }
   },
-  sockets: {
-    message({ user, message }) {
+  created() {
+    channel.subscribe("message", ({ data: { user, message } }) => {
       this.messages.push([user, message]);
       if (this.user !== user) {
-        this.$notification.show(user, {
-          body: message,
-          icon: 'https://f4.bcbits.com/img/0010573837_20.jpg'
-          }, {});
+        this.$notification.show(
+          user,
+          {
+            body: message,
+            icon: "https://f4.bcbits.com/img/0010573837_20.jpg"
+          },
+          {}
+        );
       }
-    }
+    });
   },
   directives: {
     focus: {

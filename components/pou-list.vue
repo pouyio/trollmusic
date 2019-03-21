@@ -1,13 +1,12 @@
 <template>
   <div class="pt-2">
-    <pou-bordered :icon="'🔜'" :active="videos.length" class="p-4">
+    <pou-bordered icon="🔜" :active="videos.length" class="p-4">
       <draggable
         class="flex flex-wrap justify-around"
         v-if="videos.length"
-        v-model="videos"
+        v-model="vids"
         @start="drag=true"
         @end="drag=false"
-        @change="checkMove"
       >
         <div
           v-for="video in videos"
@@ -30,7 +29,7 @@
               >
             </figure>
             <div class="m-2 text-sm">
-              <p>{{video.title}}</p>
+              <p v-html="video.title"></p>
               <p class="font-light text-orange mt-1 text-right">👤 {{video.user}}</p>
             </div>
           </div>
@@ -53,35 +52,31 @@ export default {
     draggable
   },
   props: ["user"],
-  created() {
-    // this.$socket.emit("initial-queue");
-  },
-  data() {
-    return {
-      list: []
-    };
-  },
   firestore() {
     return {
-      videos: db.collection("videos")
+      videos: db.collection("videos").orderBy("order")
     };
+  },
+  computed: {
+    vids: {
+      get() {
+        return this.videos;
+      },
+      set(newVideos) {
+        newVideos.map((v, i) => {
+          db.collection("videos")
+            .doc(v[".key"])
+            .update({ order: i });
+        });
+      }
+    }
   },
   methods: {
     remove(video) {
-      this.$firestore.videos.doc(video[".key"]).delete();
-      // this.$socket.emit("remove", this.user, videoId);
-    },
-    checkMove() {
-      // this.$socket.emit("reorder", this.list, this.user);
+      db.collection("videos")
+        .doc(video[".key"])
+        .delete();
     }
   }
-  // sockets: {
-  //   queue([user, list]) {
-  //     this.list = list;
-  //   },
-  //   reorder(videos) {
-  //     this.list = videos;
-  //   }
-  // }
 };
 </script>

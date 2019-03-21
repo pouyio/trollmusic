@@ -48,6 +48,7 @@ import pouList from "./components/pou-list.vue";
 import pouChat from "./components/pou-chat.vue";
 import pouUsers from "./components/pou-users.vue";
 import { db } from "./firebase.js";
+import { user } from "./ably/ably.js";
 
 export default {
   name: "App",
@@ -70,9 +71,7 @@ export default {
     }
   },
   created() {
-    // this.user = prompt("Write your username");
-    this.user = "pollo" + (new Date().getTime() % 100000);
-    // this.$socket.emit("set-user", this.user);
+    this.user = user;
   },
   methods: {
     toggleBackground() {
