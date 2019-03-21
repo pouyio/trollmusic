@@ -4,6 +4,7 @@
         "trollmusic.vicenteortiz.me"
     ],
     "env": {
+        "youtube_key": "@youtube_key",
         "projectid": "@projectid",
         "private_key": "@private_key",
         "client_email": "@client_email"

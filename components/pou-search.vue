@@ -44,7 +44,7 @@ export default {
         return;
       }
       const results = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${process.env.KEY}&q=${text}&maxResults=25`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&kind=video&key=${process.env.youtube_key}&q=${text}&maxResults=25`
       );
       this.appendVideos((await results.json()).items || []);
     }, 500)
