@@ -1,16 +1,16 @@
 <template>
   <pou-bordered icon="💬" active="true">
     <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
-    <div class="overflow-auto h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
+    <div class="overflow-auto h-64 pr-1" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
         <div
           v-for="(message, index) in messages"
           :key="+index"
-          class="py-1 flex flex-col leading-none"
+          class="pt-1 flex flex-col leading-none"
           :class="{'text-right': message[0] === user}"
         >
           <span v-if="message[0] !== user" class="text-xs font-light text-orange">{{message[0]}}</span>
-          {{message[1]}}
+          <span v-html="message[1]"></span>
         </div>
       </transition-group>
     </div>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import anchorme from "anchorme";
 import pouBordered from "./pou-bordered";
 import EmojiPicker from "vue-emoji-picker";
 import { channel } from "../ably/ably.js";
@@ -96,7 +97,23 @@ export default {
   },
   created() {
     channel.subscribe("message", ({ data: { user, message } }) => {
-      this.messages.push([user, message]);
+      this.messages.push([
+        user,
+        anchorme(message, {
+          truncate: 20,
+          attributes: [
+            {
+              name: "target",
+              value: "_blank"
+            },
+            {
+              name: "class",
+              value: "text-orange-darker"
+              
+            }
+          ]
+        })
+      ]);
       if (this.user !== user) {
         this.$notification.show(
           user,
