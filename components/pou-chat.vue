@@ -1,5 +1,5 @@
 <template>
-  <pou-bordered :icon="'💬'" :active="active">
+  <pou-bordered icon="💬" active="true">
     <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
     <div class="overflow-auto h-64" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
@@ -16,11 +16,9 @@
     </div>
     <div class="border-t -mx-2 px-2 pt-2 relative">
       <textarea
-        :disabled="!active"
         class="resize-y w-full outline-none pr-6"
-        :class="{'bg-grey-lighter': !active}"
         type="text"
-        :placeholder="active ? 'Send a message...' : 'Play something to send a message'"
+        placeholder="Send a message..."
         v-model="message"
         @keyup.enter="submit"
       ></textarea>
@@ -29,7 +27,7 @@
           class="absolute pin-t pin-r p-2 cursor-pointer emoji-invoker outline-none"
           slot="emoji-invoker"
           slot-scope="{ events: { click: clickEvent } }"
-          @click="active && clickEvent()"
+          @click="clickEvent()"
         >
           <button class="focus:outline-none h-6 w-6 rounded-full">😀</button>
         </div>
@@ -67,9 +65,11 @@
 <script>
 import pouBordered from "./pou-bordered";
 import EmojiPicker from "vue-emoji-picker";
+import { channel } from "../ably/ably.js";
+
 export default {
   name: "pou-chat",
-  props: ["user", "active"],
+  props: ["user"],
   components: {
     pouBordered,
     EmojiPicker
@@ -87,23 +87,27 @@ export default {
       if (!this.message) {
         return;
       }
-      this.$socket.emit("message", { user: this.user, message: this.message });
+      channel.publish("message", { user: this.user, message: this.message });
       this.message = "";
     },
     append(emoji) {
       this.message += emoji;
     }
   },
-  sockets: {
-    message({ user, message }) {
+  created() {
+    channel.subscribe("message", ({ data: { user, message } }) => {
       this.messages.push([user, message]);
       if (this.user !== user) {
-        this.$notification.show(user, {
-          body: message,
-          icon: 'https://f4.bcbits.com/img/0010573837_20.jpg'
-          }, {});
+        this.$notification.show(
+          user,
+          {
+            body: message,
+            icon: "https://f4.bcbits.com/img/0010573837_20.jpg"
+          },
+          {}
+        );
       }
-    }
+    });
   },
   directives: {
     focus: {

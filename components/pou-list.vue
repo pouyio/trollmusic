@@ -1,22 +1,21 @@
 <template>
   <div class="pt-2">
-    <pou-bordered :icon="'🔜'" :active="list.length" class="p-4">
+    <pou-bordered icon="🔜" :active="videos.length" class="p-4">
       <draggable
         class="flex flex-wrap justify-around"
-        v-if="list.length"
-        v-model="list"
+        v-if="videos.length"
+        v-model="vids"
         @start="drag=true"
         @end="drag=false"
-        @change="checkMove"
       >
         <div
-          v-for="video in list"
+          v-for="video in videos"
           :key="video.video"
           class="w-32 md:w-48 md:m-2 m-1 border rounded md:flex-initial flex-grow relative cursor-move"
         >
           <div class="overflow-hidden">
             <button
-              @click="remove(video.video)"
+              @click="remove(video)"
               class="block absolute bg-red-lighter pin-r rounded-full p-1 w-5 focus:outline-none"
               style="top: -.5em; right: -.5em"
             >
@@ -30,7 +29,7 @@
               >
             </figure>
             <div class="m-2 text-sm">
-              <p>{{video.title}}</p>
+              <p v-html="video.title"></p>
               <p class="font-light text-orange mt-1 text-right">👤 {{video.user}}</p>
             </div>
           </div>
@@ -44,6 +43,8 @@
 <script>
 import pouBordered from "./pou-bordered";
 import draggable from "vuedraggable";
+import { db } from "../firebase.js";
+
 export default {
   name: "pou-list",
   components: {
@@ -51,28 +52,30 @@ export default {
     draggable
   },
   props: ["user"],
-  created() {
-    this.$socket.emit("initial-queue");
-  },
-  data() {
+  firestore() {
     return {
-      list: []
+      videos: db.collection("videos").orderBy("order")
     };
   },
-  methods: {
-    remove(videoId) {
-      this.$socket.emit("remove", this.user, videoId);
-    },
-    checkMove() {
-      this.$socket.emit("reorder", this.list, this.user);
+  computed: {
+    vids: {
+      get() {
+        return this.videos;
+      },
+      set(newVideos) {
+        newVideos.map((v, i) => {
+          db.collection("videos")
+            .doc(v[".key"])
+            .update({ order: i });
+        });
+      }
     }
   },
-  sockets: {
-    queue([user, list]) {
-      this.list = list;
-    },
-    reorder(videos) {
-      this.list = videos;
+  methods: {
+    remove(video) {
+      db.collection("videos")
+        .doc(video[".key"])
+        .delete();
     }
   }
 };
