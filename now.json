@@ -8,5 +8,8 @@
         "projectid": "@projectid",
         "private_key": "@private_key",
         "client_email": "@client_email"
-    }
+    },
+    "regions": [
+        "bru"
+    ]
 }
