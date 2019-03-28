@@ -7,6 +7,7 @@
         :style="{fontSize, marginTop}"
         style="transition: all .3s; background: rgba(255,255,255,.3)"
         placeholder="set your username..."
+        autofocus
         v-model="name"
         v-on:keyup.enter="setUser(name)"
       >
