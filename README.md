@@ -1,6 +1,7 @@
 # [Trollmusic 🎧🙃](https://trollmusic.vicenteortiz.me)
 Webapp (pet project 🐶) to create and watch youtube playlists collaboratively.
 
+![](demo.gif)
 
 ## Features
  - Real time video playing
