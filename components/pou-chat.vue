@@ -109,7 +109,6 @@ export default {
             {
               name: "class",
               value: "text-orange-darker"
-              
             }
           ]
         })
@@ -121,7 +120,7 @@ export default {
             body: message,
             icon: "https://f4.bcbits.com/img/0010573837_20.jpg"
           },
-          {}
+          { onclick: null }
         );
       }
     });
