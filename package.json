@@ -32,6 +32,7 @@
     "vue-firestore": "^0.3.21",
     "vue-hot-reload-api": "^2.3.1",
     "vue-native-notification": "^1.0.5",
+    "vue-sanitize": "^0.2.0",
     "vue-youtube-embed": "^2.2.1",
     "vuedraggable": "^2.17.0"
   },
