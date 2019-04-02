@@ -10,7 +10,7 @@
           :class="{'text-right': message[0] === user}"
         >
           <span v-if="message[0] !== user" class="text-xs font-light text-orange">{{message[0]}}</span>
-          <span>{{message[1]}}</span>
+          <span v-html="sanitize(message[1])"></span>
         </div>
       </transition-group>
     </div>
@@ -93,6 +93,9 @@ export default {
     },
     append(emoji) {
       this.message += emoji;
+    },
+    sanitize(text) {
+      return this.$sanitize(text);
     }
   },
   created() {
@@ -100,7 +103,7 @@ export default {
       this.messages.push([
         user,
         anchorme(message, {
-          truncate: 20,
+          truncate: 100,
           attributes: [
             {
               name: "target",
@@ -120,7 +123,7 @@ export default {
             body: message,
             icon: "https://f4.bcbits.com/img/0010573837_20.jpg"
           },
-          { onclick: null }
+          { onclick: () => window.focus() }
         );
       }
     });
