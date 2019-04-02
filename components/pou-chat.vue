@@ -10,7 +10,7 @@
           :class="{'text-right': message[0] === user}"
         >
           <span v-if="message[0] !== user" class="text-xs font-light text-orange">{{message[0]}}</span>
-          <span v-html="message[1]"></span>
+          <span>{{message[1]}}</span>
         </div>
       </transition-group>
     </div>
