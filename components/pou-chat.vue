@@ -116,7 +116,7 @@ export default {
           ]
         })
       ]);
-      if (this.user !== user) {
+      if (this.user !== user && !document.hasFocus()) {
         this.$notification.show(
           user,
           {
