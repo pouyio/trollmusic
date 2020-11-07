@@ -1,6 +1,6 @@
 <template>
   <ul
-    class="flex rounded p-0 bg-orange absolute flex-wrap shadow-lg overflow-y-auto justify-around"
+    class="flex rounded p-0 bg-orange-300 absolute flex-wrap shadow-lg overflow-y-auto justify-around"
     style="-webkit-overflow-scrolling: touch;"
     v-click-outside="hide"
   >

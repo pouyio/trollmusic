@@ -4,7 +4,7 @@ import VueChatScroll from 'vue-chat-scroll';
 import VueNativeNotification from 'vue-native-notification';
 import VueFirestore from 'vue-firestore';
 import VueSanitize from 'vue-sanitize';
-import './style.css'
+import './tailwind.css'
 
 import App from './App.vue';
 

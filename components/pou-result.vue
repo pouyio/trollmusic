@@ -8,8 +8,8 @@
     <div class="p-2 flex-grow">
       <p v-html="title"></p>
     </div>
-    <div class="border-t border-orange flex">
-      <div class="inline-block border-r border-orange py-2 w-1/2 text-center">
+    <div class="border-t border-orange-300 flex">
+      <div class="inline-block border-r border-orange-600 py-2 w-1/2 text-center">
         <button class="font-light focus:outline-none" @click="addVideo">Play now ▶️</button>
       </div>
       <div class="inline-block py-2 w-1/2 text-center">

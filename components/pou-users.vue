@@ -1,11 +1,11 @@
 <template>
   <pou-bordered icon="👥" :active="otherUsers.length">
-    <h2 class="absolute pin-t bg-white rounded-full px-2">👥</h2>
+    <h2 class="absolute top-0 bg-white rounded-full px-2">👥</h2>
     <div v-if="otherUsers.length">
       <p
         v-for="user of otherUsers"
         :key="user"
-        class="text-xs my-1 py-1 px-2 bg-grey inline-block rounded-full text-grey-lightest font-light"
+        class="text-xs my-1 py-1 px-2 bg-gray-300 inline-block rounded-full text-grey-lightest font-light"
       >{{ user }}</p>
     </div>
     <h2 v-else class="text-center self-center mx-auto">No users ☹️</h2>

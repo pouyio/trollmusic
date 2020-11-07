@@ -14,15 +14,15 @@
     </div>
     <div v-if="user">
       <nav
-        class="flex bg-white h-16 items-center border-b-2 border-orange-light shadow w-full fixed z-50"
+        class="flex bg-white h-16 items-center border-b-2 border-orange-300 shadow w-full fixed z-50"
       >
-        <div class="w-full max-w-2xl relative mx-auto md:px-6">
+        <div class="w-full max-w-5xl relative mx-auto md:px-6">
           <div class="flex items-center justify-around">
             <figure class="md:w-1/4 xl:w-1/5 md:px-6 pr-8">
               <img @click="toggleBackground" class="cursor-pointer h-16 w-auto" src="/lol.gif">
             </figure>
             <div
-              class="cursor-pointer bg-orange-lighter p-1 rounded flex items-center px-2 hover:shadow-md transition"
+              class="cursor-pointer bg-orange-200 p-1 rounded flex items-center px-2 hover:shadow-md transition"
               @click="fix"
             >
               <h2>🐛</h2>
@@ -35,7 +35,7 @@
           </div>
         </div>
       </nav>
-      <main class="pt-20 max-w-2xl mx-auto">
+      <main class="pt-20 max-w-5xl mx-auto">
         <section
           class="flex flex-wrap md:flex-no-wrap rounded-lg bg-white overflow-hidden shadow mx-2 xl:mx-0"
         >

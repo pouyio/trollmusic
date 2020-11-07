@@ -30,7 +30,7 @@
             </figure>
             <div class="m-2 text-sm">
               <p v-html="video.title"></p>
-              <p class="font-light text-orange mt-1 text-right">👤 {{video.user}}</p>
+              <p class="font-light text-orange-600 mt-1 text-right">👤 {{video.user}}</p>
             </div>
           </div>
         </div>

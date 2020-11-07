@@ -3,7 +3,7 @@
     <div>
       <input
         v-model="searchText"
-        class="transition outline-none border border-transparent bg-orange-lighter focus:border-orange-light rounded focus:bg-white hover:shadow-md py-2 pr-4 pl-4 md:pl-10 block w-full appearance-none leading-normal"
+        class="transition outline-none border border-transparent bg-orange-200 focus:border-orange-200 rounded focus:bg-white hover:shadow-md py-2 pr-4 pl-4 md:pl-10 block w-full appearance-none leading-normal"
         type="text"
         placeholder="🔍 Search video..."
         @keydown.esc="reset"

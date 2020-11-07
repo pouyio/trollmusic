@@ -1,18 +1,18 @@
-@tailwind preflight;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --custom-color: #ffbc6b;
+  --custom-color: #ffbc6b;
 }
 
 .bg-1 {
-    background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
+  background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/ignasi_pattern_s.png");
 }
 .bg-2 {
-    background-image: url("lol.gif");
+  background-image: url("lol.gif");
 }
 
 .transition {
-    transition: all .1s ease-in;
+  transition: all 0.1s ease-in;
 }
