@@ -1,7 +1,7 @@
 {
   "env": {
     "youtube_key": "@youtube_key",
-    "FIREBASE_CONFIG": "@firebase_config"
+    "FIREBASE_CONFIG": "@FIREBASE_CONFIG"
   },
   "regions": ["cdg1"]
 }
