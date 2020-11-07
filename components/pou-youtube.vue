@@ -17,7 +17,7 @@
       <pou-bordered icon="🎥" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
         <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
           <h2 v-html="video.title"></h2>
-          <p class="md:ml-2 text-sm text-orange md:px-2 font-light">👤 {{ video.user }}</p>
+          <p class="md:ml-2 text-sm text-orange-600 md:px-2 font-light">👤 {{ video.user }}</p>
         </div>
         <div class="flex items-center">
           <input
@@ -121,7 +121,7 @@ export default {
     },
     onEnded() {
       clearInterval(this.interval);
-      fetch(`./ended?id=${this.video.video}`);
+      fetch(`./api/ended?id=${this.video.video}`);
     },
     updateProgress() {
       this.secondsInternal = this.player.getCurrentTime();

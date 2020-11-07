@@ -1,6 +1,6 @@
 <template>
   <pou-bordered icon="💬" active="true">
-    <h2 class="absolute pin-t bg-white rounded-full px-2"></h2>
+    <h2 class="absolute top-0 bg-white rounded-full px-2"></h2>
     <div class="overflow-auto h-64 pr-1" v-chat-scroll="{always: false, scrollonremoved:true}">
       <transition-group name="getin">
         <div
@@ -9,7 +9,7 @@
           class="pt-1 flex flex-col leading-none"
           :class="{'text-right': message[0] === user}"
         >
-          <span v-if="message[0] !== user" class="text-xs font-light text-orange">{{message[0]}}</span>
+          <span v-if="message[0] !== user" class="text-xs font-light text-orange-600">{{message[0]}}</span>
           <span v-html="sanitize(message[1])"></span>
         </div>
       </transition-group>
@@ -24,7 +24,7 @@
       ></textarea>
       <emoji-picker :search="search">
         <div
-          class="absolute pin-t pin-r p-2 cursor-pointer emoji-invoker outline-none"
+          class="absolute top-0 right-0 p-2 cursor-pointer emoji-invoker outline-none"
           slot="emoji-invoker"
           slot-scope="{ events: { click: clickEvent } }"
           @click="clickEvent()"
@@ -47,7 +47,7 @@
               <h5 class="text-grey-darker uppercase text-sm cursor-default mb-2 mt-4">{{ category }}</h5>
               <div class="flex flex-wrap justify-between emojis text-lg">
                 <button
-                  class="p-1 cursor-pointer rounded hover:bg-grey-light focus:outline-none flex items-center justify-center h-6 w-6"
+                  class="p-1 cursor-pointer rounded hover:bg-gray-200 focus:outline-none flex items-center justify-center h-6 w-6"
                   v-for="(emoji, emojiName) in emojiGroup"
                   :key="emojiName"
                   @click="append(emoji)"
@@ -111,7 +111,7 @@ export default {
             },
             {
               name: "class",
-              value: "text-orange-darker"
+              value: "text-orange-600"
             }
           ]
         })
