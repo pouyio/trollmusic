@@ -1,4 +1,4 @@
-# [Trollmusic 🎧🙃](https://trollmusic.vicenteortiz.me)
+# [Trollmusic 🎧🙃](https://trollmusic.vercel.app)
 Webapp (pet project 🐶) to create and watch youtube playlists collaboratively.
 
 ![](demo.gif)
