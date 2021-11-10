@@ -11,7 +11,7 @@
           @ready="onReady"
           @ended="onEnded"
         ></youtube>
-        <button class="w-full absolute pin opacity-0 play-cursor" @click="togglePlay"></button>
+        <button class="w-full absolute pin opacity-0 play-cursor top-0 bottom-0" @click="togglePlay"></button>
       </div>
 
       <pou-bordered icon="🎥" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
