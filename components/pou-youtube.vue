@@ -15,9 +15,24 @@
       </div>
 
       <pou-bordered icon="🎥" :active="true" class="pt-4 m-4 md:mr-0 mt-2">
-        <div class="flex items-baseline mb-2 md:flex-row flex-col justify-between">
-          <h2 v-html="video.title"></h2>
-          <p class="md:ml-2 text-sm text-orange-600 md:px-2 font-light">👤 {{ video.user }}</p>
+        <div class="flex items-center mb-2 md:flex-row">
+          <h2 class="flex-1" v-html="video.title"></h2>
+          <p class="md:px-2 whitespace-no-wrap" style="width: 7rem">
+            <span class="inline-block" style="width: 1.1rem">
+              {{ volumeIcon }}
+            </span>
+            <input
+              class="slider"
+              style="width: 83%"
+              step="1"
+              min="0"
+              max="100"
+              type="range"
+              v-model="volume"
+              @change="updateVolume"
+            >
+          </p>
+          <p class="text-sm text-orange-600 md:px-2 font-light whitespace-no-wrap">👤 {{ video.user }}</p>
         </div>
         <div class="flex items-center">
           <input
@@ -75,6 +90,7 @@ export default {
       player: null,
       interval: null,
       secondsInternal: 0,
+      volume: 100,
       secondsMax: 0
     };
   },
@@ -104,6 +120,7 @@ export default {
       this.player.seekTo(this.video.seconds, true);
       clearInterval(this.interval);
       this.interval = setInterval(this.updateProgress, 1000);
+      this.player.setVolume(this.volume);
       this.player.playVideo();
     },
     pauseVideo() {
@@ -137,6 +154,9 @@ export default {
         this.playVideo();
       }
     },
+    updateVolume() {
+      this.player.setVolume(this.volume);
+    },
     changeSeconds() {
       this.player.seekTo(this.secondsInternal, true);
       this.$firestore.video.update({ seconds: +this.secondsInternal });
@@ -148,6 +168,9 @@ export default {
     },
     timeMax() {
       return format(this.secondsMax * 1000);
+    },
+    volumeIcon() {
+      return (this.volume < 33) ? "🔈" : (this.volume < 66) ? "🔉" : "🔊"
     }
   }
 };

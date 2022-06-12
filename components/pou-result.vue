@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-sm w-32 md:w-48 md:m-2 m-1 rounded md:flex-initial flex-grow relative overflow-hidden bg-orange-lightest flex flex-col"
+    class="text-sm w-32 md:w-48 md:m-2 m-1 rounded md:flex-initial flex-grow relative overflow-hidden bg-orange-100 flex flex-col"
   >
     <figure class>
       <img class="w-full" :src="img" alt="video image">
@@ -9,7 +9,7 @@
       <p v-html="title"></p>
     </div>
     <div class="border-t border-orange-300 flex">
-      <div class="inline-block border-r border-orange-600 py-2 w-1/2 text-center">
+      <div class="inline-block border-r border-orange-300 py-2 w-1/2 text-center">
         <button class="font-light focus:outline-none" @click="addVideo">Play now ▶️</button>
       </div>
       <div class="inline-block py-2 w-1/2 text-center">
