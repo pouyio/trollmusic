@@ -9,6 +9,9 @@
     "dev": "npm run tailwind:css && parcel index.html --no-source-maps",
     "develop": "vercel dev"
   },
+  "engines": {
+    "node": ">16"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
