@@ -40,7 +40,7 @@
     "@vue/component-compiler-utils": "^2.6.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
-    "parcel": "^1.12.4",
+    "parcel": "^2.8.0",
     "tailwindcss": "^1.9.6",
     "vue-template-compiler": "^2.6.12"
   }
