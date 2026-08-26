@@ -1,4 +1,4 @@
-import * as Ably from 'ably';
+import Ably from 'ably';
 
 let channel;
 let clientId = "";
